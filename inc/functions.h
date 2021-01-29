@@ -2,19 +2,26 @@
 #define FUNCTIONS_H
 
 #include "raylib.h"
-#include "math.h"
+#include "raymath.h"
 #include "stdint.h"
 #include "stdio.h"
 
 #define SCREEN_WIDTH 1600
 #define SCREEN_HEIGHT 900
 
-#define GRAVITY 9.8f
-#define MAX_JMP_HT 4.0f
-#define DFLT_JMP_HT 2.0f
-#define DFLT_SPD 2.0f
+//physics constants
+#define GRAVITY 9.80665f
+#define MAX_VELOCITY 200.0f
+#define FRICTION 1.0f
+
+//player constants
+#define MAX_JMP_HT 5
+#define DFLT_JMP_HT 2
+#define DFLT_SPD 1.5f
 #define DFLT_SPRNT_SPD 4.0f
 #define PLYR_SZ 50.0f
+
+//for fun
 #define YES 1
 
 
@@ -33,7 +40,7 @@ typedef struct EnvItem {
     bool blocking;
 } EnvItem;
 
-void UpdatePlayer(Entity *player);
+void UpdatePlayer(Entity *player, EnvItem *envItems, int envItemsLength, float deltaTime);
 void CreatePlayer(Entity *player);
 
 #endif
