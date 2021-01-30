@@ -1,8 +1,38 @@
+/**
+ * functions.c
+ */
+
 #include "../inc/functions.h"
 
+/**
+ * This file holds all of the functions for initializing the
+ * player entity and camera. As well as functions for collision detection,
+ * and eventually drawing textures.
+ * 
+ * @author Joseph Deming
+ * @author Hunter Craig
+ * 
+ * @version 0.0.1-alpha
+ */
 
-
+//global variable
 float speedMult = 1.0f;
+
+/**
+ * UpdatePlayer
+ * ------------
+ * 
+ * Updates the players position in relation to environment items.
+ * Collision detection is performed here, and player stats are modified here
+ * as well when collision occurs with a powerup item or obstacle
+ * 
+ * @param player - pointer to the entity being updated
+ * @param envItems - array of environment items used for collision 
+ * @param envItemsLength - length of the array of environment items
+ * @param deltaTime - change in time between each frame update
+ * 
+ * @return none - returns nothing
+ */
 
 void UpdatePlayer(Entity *player, EnvItem *envItems, int envItemsLength, float deltaTime) {
 
@@ -67,6 +97,26 @@ void UpdatePlayer(Entity *player, EnvItem *envItems, int envItemsLength, float d
     player->hitBox.x += player->velocity.x;
 }
 
+/**
+ * UpdateCameraCenter
+ * ------------------
+ * 
+ * Updates the camera position and offset relative to the players position
+ * and position of environment items.
+ * 
+ * Determines max/min between the players position, environment item position, and screen dimensions
+ * to calculate the proper offset for the camera.
+ * 
+ * @param camera - pointer to the 2D camera being updated
+ * @param player - pointer to the entity the camera should focus on
+ * @param envItems - array of environment items
+ * @param envItemsLength - length of the array of environment items
+ * @param width  - screen width
+ * @param height - screen height
+ * 
+ * @return none - returns nothing
+ */
+
 void UpdateCameraCenter(Camera2D *camera, Entity *player, EnvItem *envItems, int width, int height) {
     // reset camera position
     camera->target = (Vector2){player->hitBox.x, player->hitBox.y};
@@ -89,6 +139,17 @@ void UpdateCameraCenter(Camera2D *camera, Entity *player, EnvItem *envItems, int
 
 }
 
+/**
+ * CreatePlayer
+ * ------------
+ * 
+ * Initializes the player entity with default stats
+ * 
+ * @param player - pointer to the entity being initialized as player
+ * 
+ * @return none - returns nothing
+ */
+
 void CreatePlayer(Entity *player) {
     player->hitBox = (Rectangle) {10, SCREEN_HEIGHT - 350, PLYR_SZ, PLYR_SZ};
     player->velocity = (Vector2) {0,0};
@@ -97,6 +158,22 @@ void CreatePlayer(Entity *player) {
     player->jumpHeight = DFLT_JMP_HT;
     player->canJump = YES;
 }
+
+/**
+ * CreateCamera
+ * ------------
+ * 
+ * Initializes the 2D camera used to
+ * track the player as it moves through the
+ * game.
+ * 
+ * @param camera - pointer to 2D camera that is being initialized
+ * @param player - pointer to player entity that the camera should focus on
+ * @param width  - width of the grame window
+ * @param height - height of the game window
+ * 
+ * @return none - returns nothing
+ */
 
 void CreateCamera(Camera2D *camera, Entity *player, int width, int height) {
     camera->target = (Vector2){player->hitBox.x, player->hitBox.y};
