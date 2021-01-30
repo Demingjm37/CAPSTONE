@@ -60,7 +60,7 @@ void UpdatePlayer(Entity *player, EnvItem *envItems, int envItemsLength, float d
 
     // check if player is at the world border
     if (player->hitBox.x < 0) { player->hitBox.x = 0; player->velocity.x = 0; }
-    if (player->hitBox.x > 3770) { player->hitBox.x = 3770; player->velocity.x = 0; }
+    if (player->hitBox.x > 3700) { player->hitBox.x = 3700; player->velocity.x = 0; }
 
     // now update the players hitbox
     player->velocity.x = player->velocity.x / ( 1 + FRICTION * deltaTime);
@@ -72,7 +72,7 @@ void UpdateCameraCenter(Camera2D *camera, Entity *player, EnvItem *envItems, int
     camera->target = (Vector2){player->hitBox.x, player->hitBox.y};
     camera->offset = (Vector2){width / 2, height / 2};
 
-    float minX = 0, minY = 150, maxX = 3800, maxY = 5000;
+    float minX = 0, minY = 150, maxX = 3700, maxY = 5000;
 
     EnvItem temp = envItems[0]; //first element in the map will be used for setting the bounds of the camera
     // set min and max 
@@ -83,9 +83,9 @@ void UpdateCameraCenter(Camera2D *camera, Entity *player, EnvItem *envItems, int
     Vector2 min = GetWorldToScreen2D((Vector2){minX, minY}, *camera); // sets the minimum position for the camera
 
     if (max.x < width) camera->offset.x = width - (max.x - width / 2); // if max.x is less than width set the x offset to w - (max - w/2)
-    if (min.x < 0) camera->offset.x = width / 2 - min.x; // if min position is less than 0 set the offset to (w / 2) - min
+    if (min.x > 0) camera->offset.x = width / 2 - min.x; // if minimum pos exceeds 0 then set offest to (w / 2) - min
 
-    camera->offset.y = height / 2 - min.y; //nothing special for the y-offset. Set to half of the screen height - the minimum y
+    camera->offset.y = height / 2 - min.y; // nothing special for the y-offset. (h / 2) - minY
 
 }
 
