@@ -41,6 +41,8 @@ typedef struct EnvItem {
 } EnvItem;
 
 void UpdatePlayer(Entity *player, EnvItem *envItems, int envItemsLength, float deltaTime);
+void UpdateCameraCenter(Camera2D *camera, Entity *player, EnvItem *envItems, int width, int height);
 void CreatePlayer(Entity *player);
+void CreateCamera(Camera2D *camera, Entity *player, int width, int height);
 
 #endif
