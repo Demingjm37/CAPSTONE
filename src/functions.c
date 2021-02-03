@@ -36,8 +36,8 @@ float speedMult = 1.0f;
 
 void UpdatePlayer(Entity *player, EnvItem *envItems, int envItemsLength, float deltaTime) {
 
-    float horizontal = IsKeyDown(KEY_D) - IsKeyDown(KEY_A);
-    int initJumpVelocity = sqrtf(2 * GRAVITY * player->jumpHeight);
+    float horizontal = IsKeyDown(KEY_D) - IsKeyDown(KEY_A); // used to determine the direction the player is moving, if both keys are pressed then horizontal = 0 and the player won't move
+    int initJumpVelocity = sqrtf(2 * GRAVITY * player->jumpHeight); // the initial y-velocity used when a player jumps
 
     player->speed = ((IsKeyDown(KEY_LEFT_SHIFT)) ?  DFLT_SPRNT_SPD : DFLT_SPD) * speedMult;
 
@@ -45,10 +45,11 @@ void UpdatePlayer(Entity *player, EnvItem *envItems, int envItemsLength, float d
     player->velocity.x += horizontal * player->speed * deltaTime;
     player->velocity.y += GRAVITY * deltaTime;
 
-    // velocity = sqrt(vx^2 + vy^2)
+    // calculate the magnitude of velocity; ||V|| = sqrt(vx^2 + vy^2) 
     float velocity = sqrtf(powf(player->velocity.x, 2) + powf(player->velocity.y, 2));
 
-    // check if new velocity exceeds max velocity
+    // This checks and sets velocity if the magnitude exceeds
+    // the maximum velocity threshold to prevent infinite acceleration
     if (velocity > MAX_VELOCITY) {
         Vector2 temp = player->velocity;
         player->velocity = Vector2Scale(temp, (MAX_VELOCITY / velocity));
@@ -65,13 +66,55 @@ void UpdatePlayer(Entity *player, EnvItem *envItems, int envItemsLength, float d
 
     for (int i = 0; i < envItemsLength; i++) {
         // Check of current item is passable and check if player hitbox is hitting item hitbox
+        if (CheckCollisionRecs(envItems[i].hitBox, player->hitBox)) {
+            if (envItems[i].blocking) {
+                hitPlatform = YES;
+                platformNumber = 1;
+            } else { //collision has occured but item 'IS' passable
+                if (!envItems[i].used) {
+                    switch (envItems[i].id) {
+                        case 3:
+                            printf("Fire hit\n");
+                            break;
+                        case 5:
+                            player->jumpHeight = DFLT_JMP_HT;
+                            speedMult = 2; //double the players speed
+                            printf("Speed boost obtained\n");
+                            break;
+                        case 6:
+                            speedMult = 1;
+                            player->jumpHeight = MAX_JMP_HT;
+                            printf("Jump boost obtained\n");
+                            break;
+                        case 7:
+                            printf("heart item obtained\n");
+                            break;
+                        case 8:
+                            player->coins++;
+                            printf("coin item obtained\n");
+                            break;
+                        case 10:
+                            ResetGame(player, envItems, envItemsLength);
+                            printf("goal hit\n");
+                            break;
+                        default:
+                            printf("How did we end up here?\n");
+                            break; //shouldn't get here
+                    }
+                    envItems[i].used = true;
+                }
+
+            }
+        }
+
         if (envItems[i].blocking && CheckCollisionRecs(envItems[i].hitBox, player->hitBox)) {
             hitPlatform = YES;
             platformNumber = i;
+        
         }
     }
 
-    // collision has occured, adjust players position accordingly
+    // collision has occured, adjust players y position and velocity accordingly
     if (hitPlatform) {
         player->velocity.y = 0;                                                         // standing on a platform. set velocity y to 0
         player->hitBox.y = envItems[platformNumber].hitBox.y - player->hitBox.height;   // set the players y position to the platform height + the size of the player
@@ -92,7 +135,7 @@ void UpdatePlayer(Entity *player, EnvItem *envItems, int envItemsLength, float d
     if (player->hitBox.x < 0) { player->hitBox.x = 0; player->velocity.x = 0; }
     if (player->hitBox.x > 3700) { player->hitBox.x = 3700; player->velocity.x = 0; }
 
-    // now update the players hitbox
+    // now update the players hitbox x position
     player->velocity.x = player->velocity.x / ( 1 + FRICTION * deltaTime);
     player->hitBox.x += player->velocity.x;
 }
@@ -153,10 +196,11 @@ void UpdateCameraCenter(Camera2D *camera, Entity *player, EnvItem *envItems, int
 void CreatePlayer(Entity *player) {
     player->hitBox = (Rectangle) {10, SCREEN_HEIGHT - 350, PLYR_SZ, PLYR_SZ};
     player->velocity = (Vector2) {0,0};
-    player->color = GREEN;
+    player->color = PINK;
     player->speed = DFLT_SPD;
     player->jumpHeight = DFLT_JMP_HT;
     player->canJump = YES;
+    player->coins = 0;
 }
 
 /**
@@ -180,4 +224,35 @@ void CreateCamera(Camera2D *camera, Entity *player, int width, int height) {
     camera->offset = (Vector2){width / 2, height / 2};
     camera->rotation = 0.0f;
     camera->zoom = 1.0f;
+}
+
+void ResetGame(Entity *player, EnvItem *envItems, int envItemsLength) {
+    player->hitBox = (Rectangle) {10, SCREEN_HEIGHT - 50, PLYR_SZ, PLYR_SZ};
+    player->velocity = (Vector2) {0,0};
+    player->speed = DFLT_SPD;
+    speedMult = 1;
+    player->canJump = false;
+    player->jumpHeight = DFLT_JMP_HT;
+    player->coins = 0;
+
+    for (int i = 0; i < envItemsLength; i++) if (envItems[i].used) envItems[i].used = false;
+}
+
+/**
+ * Debug
+ * -----
+ * 
+ * Displays general data for debugging purposes
+ * 
+ * @param player - pointer to the player entity being monitored
+ * 
+ * @return none - returns nothing
+ */
+void Debug(Entity *player) {
+    DrawText(TextFormat("Player X velocity: %f", player->velocity.x), 0, 0, 20, BLACK);
+    DrawText(TextFormat("Player Coordinates: X = %0.0f,  Y = %.0f", player->hitBox.x, player->hitBox.y), 0,40, 20, BLACK);
+    DrawText(TextFormat("Coins: %d", player->coins), 0, 100, 20, BLACK);
+    DrawText(TextFormat("FPS: %d", GetFPS()), 0, 140, 20, LIME);
+    DrawText(TextFormat("Players Jump Height: %.0f", player->jumpHeight), 0, 200, 20, BLACK);
+    DrawText(TextFormat("Players speed: %.0f", player->speed), 0, 240, 20, BLACK);
 }
