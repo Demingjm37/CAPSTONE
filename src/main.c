@@ -23,8 +23,7 @@ EnvItem envItems[] = {
     {{900, SCREEN_HEIGHT - ITEM_SZ * 2, ITEM_SZ, ITEM_SZ}, BLUE, false, 6, false},
     {{1100, SCREEN_HEIGHT, 100, 150}, BROWN, true, 0, false},
     {{1300, SCREEN_HEIGHT, 300, 150}, BROWN, true, 0, false},
-    {{1500, SCREEN_HEIGHT - 50, 100, 200}, BLACK, true, 10, false}
-
+    {{1500, SCREEN_HEIGHT - 50, 100, 200}, BLACK, false, 10, false}
 };
 
 /**
