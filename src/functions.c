@@ -69,7 +69,7 @@ void UpdatePlayer(Entity *player, EnvItem *envItems, int envItemsLength, float d
         if (CheckCollisionRecs(envItems[i].hitBox, player->hitBox)) {
             if (envItems[i].blocking) {
                 hitPlatform = YES;
-                platformNumber = 1;
+                platformNumber = i;
             } else { //collision has occured but item 'IS' passable
                 if (!envItems[i].used) {
                     switch (envItems[i].id) {
@@ -101,16 +101,9 @@ void UpdatePlayer(Entity *player, EnvItem *envItems, int envItemsLength, float d
                             printf("How did we end up here?\n");
                             break; //shouldn't get here
                     }
-                    envItems[i].used = true;
+                    envItems[i].used = (envItems[i].id == 10) ? false : true;
                 }
-
             }
-        }
-
-        if (envItems[i].blocking && CheckCollisionRecs(envItems[i].hitBox, player->hitBox)) {
-            hitPlatform = YES;
-            platformNumber = i;
-        
         }
     }
 
@@ -133,14 +126,14 @@ void UpdatePlayer(Entity *player, EnvItem *envItems, int envItemsLength, float d
 
     // check if player is at the world border
     if (player->hitBox.x < 0) { player->hitBox.x = 0; player->velocity.x = 0; }
-    if (player->hitBox.x > 3700) { player->hitBox.x = 3700; player->velocity.x = 0; }
+    if (player->hitBox.x > 1550) { player->hitBox.x = 1550; player->velocity.x = 0; }
 
     // now update the players hitbox x position
     player->velocity.x = player->velocity.x / ( 1 + FRICTION * deltaTime);
     player->hitBox.x += player->velocity.x;
 
     //Check if player has fallen through pit/world, reset game
-    if (player->hitBox.y > 1600) { ResetGame(player, envItems, envItemsLength); };
+    if (player->hitBox.y > 1300) { ResetGame(player, envItems, envItemsLength); };
 }
 
 /**
@@ -168,7 +161,7 @@ void UpdateCameraCenter(Camera2D *camera, Entity *player, EnvItem *envItems, int
     camera->target = (Vector2){player->hitBox.x, player->hitBox.y};
     camera->offset = (Vector2){width / 2, height / 2};
 
-    float minX = 0, minY = 150, maxX = 3700, maxY = 5000;
+    float minX = 0, minY = 150, maxX = MAX_CMA_X, maxY = MAX_CMA_Y;
 
     EnvItem temp = envItems[0]; //first element in the map will be used for setting the bounds of the camera
     // set min and max 
@@ -182,7 +175,6 @@ void UpdateCameraCenter(Camera2D *camera, Entity *player, EnvItem *envItems, int
     if (min.x > 0) camera->offset.x = width / 2 - min.x; // if minimum pos exceeds 0 then set offest to (w / 2) - min
 
     camera->offset.y = height / 2 - min.y; // nothing special for the y-offset. (h / 2) - minY
-
 }
 
 /**
