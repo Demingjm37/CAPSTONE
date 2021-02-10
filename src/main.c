@@ -5,13 +5,26 @@
 #include "../inc/functions.h"
 
 // current map for testing and placing
-EnvItem envItems [] = {
-    {{0, SCREEN_HEIGHT, 3800, 150 }, BROWN, true, 0, false},
-    {{250, SCREEN_HEIGHT - ITEM_SZ * 2, ITEM_SZ, ITEM_SZ}, GREEN, false, 5, false}, //speed boost
-    {{100, SCREEN_HEIGHT - ITEM_SZ * 2, ITEM_SZ, ITEM_SZ}, BLUE, false, 6, false}, //jump boost
-    {{150, SCREEN_HEIGHT - ITEM_SZ * 2, ITEM_SZ, ITEM_SZ}, RED, false, 7, false},  //heart
-    {{200, SCREEN_HEIGHT - ITEM_SZ * 2, ITEM_SZ, ITEM_SZ}, GOLD, false, 8, false}, //coin
-    {{3500, SCREEN_HEIGHT - 50, 100, 200}, BLACK, false, 10, false} //goal post
+/* EnvItem envItems [] = {
+    * {{0, SCREEN_HEIGHT, 3800, 150 }, BROWN, true, 0, false}, //don't change this
+    * {{250, SCREEN_HEIGHT - ITEM_SZ * 2, ITEM_SZ, ITEM_SZ}, GREEN, false, 5, false}, //speed boost
+    * {{100, SCREEN_HEIGHT - ITEM_SZ * 2, ITEM_SZ, ITEM_SZ}, BLUE, false, 6, false}, //jump boost
+    * {{150, SCREEN_HEIGHT - ITEM_SZ * 2, ITEM_SZ, ITEM_SZ}, RED, false, 7, false},  //heart
+    * {{200, SCREEN_HEIGHT - ITEM_SZ * 2, ITEM_SZ, ITEM_SZ}, GOLD, false, 8, false}, //coin
+    * {{3500, SCREEN_HEIGHT - 50, 100, 200}, BLACK, false, 10, false} //goal post
+* };
+*/ 
+
+//Level 1 test code
+EnvItem envItems[] = {
+    {{0, SCREEN_HEIGHT, 1000, 150}, BROWN, true, 0, false},
+    {{100, SCREEN_HEIGHT - ITEM_SZ * 2, ITEM_SZ, ITEM_SZ}, GREEN, false, 5, false},
+    {{600, SCREEN_HEIGHT - 100, 75, 150}, RED, true, 1, false},
+    {{900, SCREEN_HEIGHT - ITEM_SZ * 2, ITEM_SZ, ITEM_SZ}, BLUE, false, 6, false},
+    {{1100, SCREEN_HEIGHT, 100, 150}, BROWN, true, 0, false},
+    {{1300, SCREEN_HEIGHT, 300, 150}, BROWN, true, 0, false},
+    {{1500, SCREEN_HEIGHT - 50, 100, 200}, BLACK, true, 10, false}
+
 };
 
 /**
