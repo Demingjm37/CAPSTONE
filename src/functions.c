@@ -138,6 +138,9 @@ void UpdatePlayer(Entity *player, EnvItem *envItems, int envItemsLength, float d
     // now update the players hitbox x position
     player->velocity.x = player->velocity.x / ( 1 + FRICTION * deltaTime);
     player->hitBox.x += player->velocity.x;
+
+    //Check if player has fallen through pit/world, reset game
+    if (player->hitBox.y > 1600) { ResetGame(player, envItems, envItemsLength); };
 }
 
 /**
