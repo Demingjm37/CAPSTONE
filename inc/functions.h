@@ -22,6 +22,10 @@
 #define PLYR_SZ 50.0f
 #define ITEM_SZ 25.0f
 
+//camera constants
+#define MAX_CMA_X 1300
+#define MAX_CMA_Y 5000
+
 #define DEBUG true //set to true for debug info
 
 //for fun
