@@ -1,0 +1,29 @@
+music:
+
+Game Complete Music : Space Coast - Topher Mohr & Alex Elena
+Game Over Music : Game Over - La musique de jeu video
+Game Music : Mountain Trials - Joshua McLean
+Game Start Music : (needs to be filled)
+
+sound effects:
+
+Hunter Craig
+Joseph Deming
+Using sfxr.me
+
+Textures:
+
+Joseph Deming
+Using PiskelApp.com
+
+Game Engine Developer:
+
+Joseph Deming
+
+Map Design:
+
+Hunter Craig
+
+Game Design and Planning:
+Hunter Craig
+Joseph Deming
