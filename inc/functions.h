@@ -23,7 +23,7 @@
 #define ITEM_SZ 25.0f
 
 //camera constants
-#define MAX_CMA_X 1300
+#define MAX_CMA_X 1600
 #define MAX_CMA_Y 5000
 
 #define DEBUG true //set to true for debug info
@@ -56,6 +56,8 @@ void CreatePlayer(Entity *player);
 void CreateCamera(Camera2D *camera, Entity *player, int width, int height);
 void ResetGame(Entity *player, EnvItem *envItems, int envItemsLength);
 void Debug(Entity *player);
+
+Texture2D* LoadTextures();
 
 /**
  * Environtment Items IDs:
