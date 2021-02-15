@@ -53,7 +53,7 @@ int main() {
     SetTargetFPS(60);
     
     // Calculate length of items array 
-    int envItemsLength = sizeof(envItems) / sizeof(envItems[0]);
+    int envItemsLength = 7; //sizeof(envItems) / sizeof(envItems[0]);
     float deltaTime = 0;
 
     // Main game loop
@@ -62,35 +62,37 @@ int main() {
     while(!WindowShouldClose()) {
         if (IsKeyPressed(KEY_R)) ResetGame(&player, envItems, envItemsLength);
         // update delta time, player, and camera
-        deltaTime = GetFrameTime();
-        UpdatePlayer(&player, envItems, envItemsLength, deltaTime);
-        UpdateCameraCenter(&camera, &player, envItems, SCREEN_WIDTH, SCREEN_HEIGHT);
+        deltaTime = GetFrameTime(); 
 
-    
+            UpdateCameraCenter(&camera, &player, envItems, SCREEN_WIDTH, SCREEN_HEIGHT);
 
         // begin drawing the window
         BeginDrawing();
             // reset the window and set background to white
             ClearBackground(WHITE);
-            if (DEBUG) Debug(&player);
+            UpdatePlayer(&player, envItems, envItemsLength, deltaTime);
+
             // used to initialize 2d mode with the camera 
             BeginMode2D(camera);
                 // draw the players hitbox
                 // this will later be replaced with textures
                 // and eventually replaced with animated sprites
                 DrawRectangleRec(player.hitBox, player.color);
-                
+
                 // Loop through map array and draw each items hitbox
                 for (int i = 0; i < envItemsLength; i ++) {
                     if (!envItems[i].used) DrawRectangleRec(envItems[i].hitBox, envItems[i].color);
                 }
-            EndMode2D();
 
+            EndMode2D();
+        if (DEBUG) Debug(&player);
             //This is simply for debugging
             //Todo: replace with helper function for debug uses
             
         EndDrawing();
     }
+
+    CloseWindow();
 
     return 0;
 }

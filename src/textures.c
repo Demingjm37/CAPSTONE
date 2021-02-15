@@ -8,11 +8,11 @@ Texture2D* LoadTextures() {
         LoadTexture("assets/background/parallax-mountain-trees.png"),
         LoadTexture("assets/background/parallax-mountain-foreground-trees.png")
     };
-    return &textures;
+    return textures;
 }
 
 void UnloadTextures(Texture2D *textures) {
-    int length = sizeof(textures) / sizeof(textures[0]);
+    int length = *(&textures + 1) - textures;
 
     for (int i = 0; i < length; i++) {
         UnloadTexture(textures[i]);
