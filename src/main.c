@@ -17,7 +17,12 @@
 
 //Level 1 test code
 EnvItem envItems[] = {
-    {{0, SCREEN_HEIGHT, 1000, 150}, BROWN, true, 0, false},
+    {{0, SCREEN_HEIGHT, 150, 150}, BROWN, true, 0, false},
+    {{150, SCREEN_HEIGHT, 150, 150}, BROWN, true, 0, false},
+    {{300, SCREEN_HEIGHT, 150, 150}, BROWN, true, 0, false},
+    {{450, SCREEN_HEIGHT, 150, 150}, BROWN, true, 0, false},
+    {{600, SCREEN_HEIGHT, 150, 150}, BROWN, true, 0, false},
+    {{750, SCREEN_HEIGHT, 150, 150}, BROWN, true, 0, false},
     {{100, SCREEN_HEIGHT - ITEM_SZ * 2, ITEM_SZ, ITEM_SZ}, GREEN, false, 5, false},
     {{600, SCREEN_HEIGHT - 100, 75, 150}, RED, true, 1, false},
     {{900, SCREEN_HEIGHT - ITEM_SZ * 2, ITEM_SZ, ITEM_SZ}, BLUE, false, 6, false},
@@ -63,31 +68,31 @@ int main() {
         if (IsKeyPressed(KEY_R)) ResetGame(&player, envItems, envItemsLength);
         // update delta time, player, and camera
         deltaTime = GetFrameTime();
-        UpdatePlayer(&player, envItems, envItemsLength, deltaTime);
         UpdateCameraCenter(&camera, &player, envItems, SCREEN_WIDTH, SCREEN_HEIGHT);
-
-    
 
         // begin drawing the window
         BeginDrawing();
+
             // reset the window and set background to white
             ClearBackground(WHITE);
-            if (DEBUG) Debug(&player);
+
             // used to initialize 2d mode with the camera 
             BeginMode2D(camera);
                 // draw the players hitbox
                 // this will later be replaced with textures
                 // and eventually replaced with animated sprites
-                DrawRectangleRec(player.hitBox, player.color);
-                
+
+                UpdatePlayer(&player, envItems, envItemsLength, deltaTime);
                 // Loop through map array and draw each items hitbox
+
                 for (int i = 0; i < envItemsLength; i ++) {
-                    if (!envItems[i].used) DrawRectangleRec(envItems[i].hitBox, envItems[i].color);
+                   if (!envItems[i].used) DrawRectangleRec(envItems[i].hitBox, envItems[i].color);
                 }
             EndMode2D();
 
             //This is simply for debugging
             //Todo: replace with helper function for debug uses
+            if (DEBUG) Debug(&player);
             
         EndDrawing();
     }
