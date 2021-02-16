@@ -78,16 +78,15 @@ int main() {
 
             // used to initialize 2d mode with the camera 
             BeginMode2D(camera);
-                // draw the players hitbox
-                // this will later be replaced with textures
-                // and eventually replaced with animated sprites
-
-                UpdatePlayer(&player, envItems, envItemsLength, deltaTime);
-                // Loop through map array and draw each items hitbox
-
+                // draw the environment items
                 for (int i = 0; i < envItemsLength; i ++) {
                    if (!envItems[i].used) DrawRectangleRec(envItems[i].hitBox, envItems[i].color);
                 }
+
+                //update and draw the player
+                UpdatePlayer(&player, envItems, envItemsLength, deltaTime);
+                if (DEBUG) DrawRectangleRec(player.hitBox, player.color);
+
             EndMode2D();
 
             //This is simply for debugging
