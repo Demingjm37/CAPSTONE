@@ -3,8 +3,9 @@
 
 #include "raylib.h"
 #include "raymath.h"
-#include "stdint.h"
-#include "stdio.h"
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 #define SCREEN_WIDTH 1600
 #define SCREEN_HEIGHT 900
@@ -31,18 +32,10 @@
 //for fun
 #define YES 1
 
-typedef struct Blocking {
-    bool top;
-    bool bottom;
-    bool left;
-    bool right;
-} Blocking;
-
 typedef struct Entity {
     Rectangle hitBox;
     Vector2 velocity;
     Color color;
-    Blocking blocking;
     bool canJump; //used to prevent double jumps
     float speed;  //for setting the players speed
     float jumpHeight; //for setting the players jump height
@@ -57,6 +50,9 @@ typedef struct EnvItem {
     bool used;
 } EnvItem;
 
+/**
+ * Functions.c
+ */
 void UpdatePlayer(Entity *player, EnvItem *envItems, int envItemsLength, float deltaTime);
 void UpdateCameraCenter(Camera2D *camera, Entity *player, EnvItem *envItems, int width, int height);
 void CreatePlayer(Entity *player);
@@ -64,9 +60,15 @@ void CreateCamera(Camera2D *camera, Entity *player, int width, int height);
 void ResetGame(Entity *player, EnvItem *envItems, int envItemsLength);
 void Debug(Entity *player);
 
+/**
+ * Textures.c
+ */
 Texture2D* LoadTextures();
 void UnloadTextures(Texture2D *textures);
 
+/**
+ * Helper.c
+ */
 Vector2 CalculateCollisionDistance(Entity player, EnvItem target);
 void ResolveCollision(Entity *player, EnvItem target, float deltaTime);
 bool PredictCollision(Entity player, EnvItem target);
