@@ -31,11 +31,18 @@
 //for fun
 #define YES 1
 
+typedef struct Blocking {
+    bool top;
+    bool bottom;
+    bool left;
+    bool right;
+} Blocking;
 
 typedef struct Entity {
     Rectangle hitBox;
     Vector2 velocity;
     Color color;
+    Blocking blocking;
     bool canJump; //used to prevent double jumps
     float speed;  //for setting the players speed
     float jumpHeight; //for setting the players jump height
@@ -58,6 +65,13 @@ void ResetGame(Entity *player, EnvItem *envItems, int envItemsLength);
 void Debug(Entity *player);
 
 Texture2D* LoadTextures();
+void UnloadTextures(Texture2D *textures);
+
+Vector2 CalculateCollisionDistance(Entity player, EnvItem target);
+void ResolveCollision(Entity *player, EnvItem target, float deltaTime);
+bool PredictCollision(Entity player, EnvItem target);
+Vector2 GetRectCenter(Rectangle rec);
+Vector2 Vector2Abs(Vector2 v);
 
 /**
  * Environtment Items IDs:
