@@ -122,7 +122,7 @@ void UpdatePlayer(Entity *player, EnvItem *envItems, int envItemsLength, float d
     //Check if player has fallen through pit/world, reset game
     if (player->hitBox.y > 1300) { ResetGame(player, envItems, envItemsLength); };
 
-    if (DEBUG) DrawRectangleRec(player->hitBox, player->color);
+
 }
 
 /**
