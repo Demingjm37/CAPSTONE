@@ -185,7 +185,6 @@ void CreatePlayer(Entity *player) {
     player->jumpHeight = DFLT_JMP_HT;
     player->canJump = YES;
     player->coins = 0;
-    player->blocking = (Blocking) {false, false, false, false};
 }
 
 /**
