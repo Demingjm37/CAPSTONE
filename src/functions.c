@@ -35,7 +35,6 @@ float speedMult = 1.0f;
  */
 
 void UpdatePlayer(Entity *player, EnvItem *envItems, int envItemsLength, float deltaTime) {
-
     float horizontal = IsKeyDown(KEY_D) - IsKeyDown(KEY_A); // used to determine the direction the player is moving, if both keys are pressed then horizontal = 0 and the player won't move
     int initJumpVelocity = sqrtf(2 * GRAVITY * player->jumpHeight); // the initial y-velocity used when a player jumps
 
@@ -55,71 +54,61 @@ void UpdatePlayer(Entity *player, EnvItem *envItems, int envItemsLength, float d
         player->velocity = Vector2Scale(temp, (MAX_VELOCITY / velocity));
     }
 
-    // Collision detection below
-    // Check if the players current position
-    // is colliding with any environment item
-    // before updating the players hitbox
-    // and redrawing.
+    player->velocity.x /= (1 + FRICTION * deltaTime);
+    player->velocity.y /= (1 + FRICTION * deltaTime);
 
-    bool hitPlatform = false;
-    short platformNumber = 0;
+    if (isnan(player->velocity.x)) player->velocity.x = 0;
+    if (isnan(player->velocity.y)) player->velocity.y = 0;
 
     for (int i = 0; i < envItemsLength; i++) {
-        // Check of current item is passable and check if player hitbox is hitting item hitbox
-        if (CheckCollisionRecs(envItems[i].hitBox, player->hitBox)) {
-            if (envItems[i].blocking) {
-                hitPlatform = YES;
-                platformNumber = i;
-            } else { //collision has occured but item 'IS' passable
-                if (!envItems[i].used) {
-                    switch (envItems[i].id) {
-                        case 3:
-                            printf("Fire hit\n");
-                            break;
-                        case 5:
-                            player->jumpHeight = DFLT_JMP_HT;
-                            speedMult = 2; //double the players speed
-                            printf("Speed boost obtained\n");
-                            break;
-                        case 6:
-                            speedMult = 1;
-                            player->jumpHeight = MAX_JMP_HT;
-                            printf("Jump boost obtained\n");
-                            break;
-                        case 7:
-                            printf("heart item obtained\n");
-                            break;
-                        case 8:
-                            player->coins++;
-                            printf("coin item obtained\n");
-                            break;
-                        case 10:
-                            ResetGame(player, envItems, envItemsLength);
-                            printf("goal hit\n");
-                            break;
-                        default:
-                            printf("How did we end up here?\n");
-                            break; //shouldn't get here
-                    }
-                    envItems[i].used = (envItems[i].id == 10) ? false : true;
-                }
-            }
+        if (envItems[i].blocking && PredictCollision(*player, envItems[i])) { // if this object isn't passable and collision 'will' occur then resolve it
+            ResolveCollision(player, envItems[i], deltaTime);
         }
     }
 
-    // collision has occured, adjust players y position and velocity accordingly
-    if (hitPlatform) {
-        player->velocity.y = 0;                                                         // standing on a platform. set velocity y to 0
-        player->hitBox.y = envItems[platformNumber].hitBox.y - player->hitBox.height;   // set the players y position to the platform height + the size of the player
-        player->canJump = true;                                                         // player is on the ground so they should be allowed to jump
-    } else {
-        player->velocity.y = player->velocity.y / (1 + FRICTION * deltaTime);           // player is not colliding, v_new = v_old / ( 1 friction_const * dt)
-        player->hitBox.y += player->velocity.y;                                         // increase players y position with the players new y velocity
-        player->canJump = false;                                       
+    if (player->canJump && (IsKeyDown(KEY_W))) { player->velocity.y = -initJumpVelocity; player->canJump = false; } // player is trying to jump, change their velocity.
+
+    player->hitBox.x += player->velocity.x;
+    player->hitBox.y += player->velocity.y;
+
+
+    for (int i = 0; i < envItemsLength; i++) {
+        if (!envItems[i].blocking && !envItems[i].used &&  //if the current item isn't blocking, hasn't been consumed, and is in collision then proceed
+            CheckCollisionRecs(player->hitBox, envItems[i].hitBox)) {
+                switch (envItems[i].id) {
+                    case 3:
+                        printf("Fire hit\n");
+                        break;
+                    case 5:
+                        player->jumpHeight = DFLT_JMP_HT;
+                        speedMult = 2; //double the players speed
+                        printf("Speed boost obtained\n");
+                        break;
+                    case 6:
+                        speedMult = 1;
+                        player->jumpHeight = MAX_JMP_HT;
+                        printf("Jump boost obtained\n");
+                        break;
+                    case 7:
+                        printf("heart item obtained\n");
+                        break;
+                    case 8:
+                        player->coins++;
+                        printf("coin item obtained\n");
+                        break;
+                    case 10:
+                        ResetGame(player, envItems, envItemsLength);
+                        printf("goal hit\n");
+                        break;
+                    default:
+                        printf("How did we end up here?\n");
+                        break; //shouldn't get here
+                }
+                envItems[i].used = (envItems[i].id == 10) ? false : true; // item has been consumed
+            }
     }
 
-    // determine if jumping
-    if (player->canJump && (IsKeyDown(KEY_W))) player->velocity.y = -initJumpVelocity; // player is trying to jump, change their velocity.
+
 
     // now update the players x position
     // TODO: replace hard coded numbers with #defines for world borders
@@ -128,12 +117,12 @@ void UpdatePlayer(Entity *player, EnvItem *envItems, int envItemsLength, float d
     if (player->hitBox.x < 0) { player->hitBox.x = 0; player->velocity.x = 0; }
     if (player->hitBox.x > 1550) { player->hitBox.x = 1550; player->velocity.x = 0; }
 
-    // now update the players hitbox x position
-    player->velocity.x = player->velocity.x / ( 1 + FRICTION * deltaTime);
-    player->hitBox.x += player->velocity.x;
+    if (player->hitBox.y < 150) { player->hitBox.y = 150; player->velocity.y = 0; }
 
     //Check if player has fallen through pit/world, reset game
     if (player->hitBox.y > 1300) { ResetGame(player, envItems, envItemsLength); };
+
+    if (DEBUG) DrawRectangleRec(player->hitBox, player->color);
 }
 
 /**
@@ -196,6 +185,7 @@ void CreatePlayer(Entity *player) {
     player->jumpHeight = DFLT_JMP_HT;
     player->canJump = YES;
     player->coins = 0;
+    player->blocking = (Blocking) {false, false, false, false};
 }
 
 /**
@@ -222,7 +212,7 @@ void CreateCamera(Camera2D *camera, Entity *player, int width, int height) {
 }
 
 void ResetGame(Entity *player, EnvItem *envItems, int envItemsLength) {
-    player->hitBox = (Rectangle) {10, SCREEN_HEIGHT - 50, PLYR_SZ, PLYR_SZ};
+    player->hitBox = (Rectangle) {10, SCREEN_HEIGHT - 350, PLYR_SZ, PLYR_SZ};
     player->velocity = (Vector2) {0,0};
     player->speed = DFLT_SPD;
     speedMult = 1;
@@ -245,6 +235,7 @@ void ResetGame(Entity *player, EnvItem *envItems, int envItemsLength) {
  */
 void Debug(Entity *player) {
     DrawText(TextFormat("Player X velocity: %f", player->velocity.x), 0, 0, 20, BLACK);
+    DrawText(TextFormat("Player Y velocity: %f", player->velocity.y), 0, 20, 20, BLACK);
     DrawText(TextFormat("Player Coordinates: X = %0.0f,  Y = %.0f", player->hitBox.x, player->hitBox.y), 0,40, 20, BLACK);
     DrawText(TextFormat("Coins: %d", player->coins), 0, 100, 20, BLACK);
     DrawText(TextFormat("FPS: %d", GetFPS()), 0, 140, 20, LIME);
