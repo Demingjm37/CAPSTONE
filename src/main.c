@@ -59,5 +59,7 @@ int main() {
         // CreditMenu()
     }
 
+    CloseWindow(); // close window and opengl
+
     return 0;
 }
