@@ -20,7 +20,8 @@
 #define DFLT_JMP_HT 2
 #define DFLT_SPD 1.5f
 #define DFLT_SPRNT_SPD 4.0f
-#define PLYR_SZ 50.0f
+#define PLYR_SZ_X 50.0f
+#define PLYR_SZ_Y 100.0f
 #define ITEM_SZ 25.0f
 #define PLTFRM_SZ 150.f
 
