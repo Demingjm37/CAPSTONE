@@ -178,7 +178,7 @@ void UpdateCameraCenter(Camera2D *camera, Entity *player, EnvItem *envItems, int
  */
 
 void CreatePlayer(Entity *player) {
-    player->hitBox = (Rectangle) {10, SCREEN_HEIGHT - 350, PLYR_SZ, PLYR_SZ};
+    player->hitBox = (Rectangle) {10, SCREEN_HEIGHT - 350, PLYR_SZ_X, PLYR_SZ_Y};
     player->velocity = (Vector2) {0,0};
     player->color = PINK;
     player->speed = DFLT_SPD;
@@ -211,7 +211,7 @@ void CreateCamera(Camera2D *camera, Entity *player, int width, int height) {
 }
 
 void ResetGame(Entity *player, EnvItem *envItems, int envItemsLength) {
-    player->hitBox = (Rectangle) {10, SCREEN_HEIGHT - 350, PLYR_SZ, PLYR_SZ};
+    player->hitBox = (Rectangle) {10, SCREEN_HEIGHT - 350, PLYR_SZ_X, PLYR_SZ_Y};
     player->velocity = (Vector2) {0,0};
     player->speed = DFLT_SPD;
     speedMult = 1;
