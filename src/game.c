@@ -46,8 +46,10 @@ void PlayGame() {
     float deltaTime = 0;
 
     while(game_state)  {
-        
+
+        if (IsKeyPressed(KEY_ESCAPE)) return;
         if (IsKeyPressed(KEY_R)) ResetGame(&player, envItems, envItemsLength);
+        
         // update delta time, player, and camera
         deltaTime = GetFrameTime();
         UpdateCameraCenter(&camera, &player, envItems, SCREEN_WIDTH, SCREEN_HEIGHT);
