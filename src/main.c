@@ -19,14 +19,17 @@
 EnvItem envItems[] = {
     {{0, SCREEN_HEIGHT, 150, 150}, BROWN, true, 0, false},
     {{150, SCREEN_HEIGHT, 150, 150}, BROWN, true, 0, false},
+    {{200, SCREEN_HEIGHT - ITEM_SZ * 2, ITEM_SZ, ITEM_SZ}, GOLD, false, 8, false},
     {{300, SCREEN_HEIGHT, 150, 150}, BROWN, true, 0, false},
+    {{400, SCREEN_HEIGHT - ITEM_SZ * 2, ITEM_SZ, ITEM_SZ}, GOLD, false, 8, false},
     {{450, SCREEN_HEIGHT, 150, 150}, BROWN, true, 0, false},
     {{600, SCREEN_HEIGHT, 150, 150}, BROWN, true, 0, false},
+    {{600, SCREEN_HEIGHT - ITEM_SZ * 2, ITEM_SZ, ITEM_SZ}, GOLD, false, 8, false},
     {{750, SCREEN_HEIGHT, 150, 150}, BROWN, true, 0, false},
-    {{100, SCREEN_HEIGHT - ITEM_SZ * 2, ITEM_SZ, ITEM_SZ}, GREEN, false, 5, false},
-    {{600, SCREEN_HEIGHT - 100, 75, 150}, RED, true, 1, false},
-    {{900, SCREEN_HEIGHT - ITEM_SZ * 2, ITEM_SZ, ITEM_SZ}, BLUE, false, 6, false},
+    {{800, SCREEN_HEIGHT - 75, 75, 100}, RED, true, 1, false},
+    {{825, SCREEN_HEIGHT - 100 - ITEM_SZ * 2, ITEM_SZ, ITEM_SZ}, GOLD, false, 8, false},
     {{1100, SCREEN_HEIGHT, 100, 150}, BROWN, true, 0, false},
+    {{1135, SCREEN_HEIGHT - ITEM_SZ * 2, ITEM_SZ, ITEM_SZ}, GOLD, false, 8, false},
     {{1300, SCREEN_HEIGHT, 300, 150}, BROWN, true, 0, false},
     {{1500, SCREEN_HEIGHT - 50, 100, 200}, BLACK, false, 10, false}
 };
