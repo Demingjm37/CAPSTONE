@@ -22,6 +22,7 @@
 #define DFLT_SPRNT_SPD 4.0f
 #define PLYR_SZ 50.0f
 #define ITEM_SZ 25.0f
+#define PLTFRM_SZ 150.f
 
 //camera constants
 #define MAX_CMA_X 1600
