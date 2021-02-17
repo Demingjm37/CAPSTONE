@@ -77,6 +77,11 @@ Vector2 GetRectCenter(Rectangle rec);
 Vector2 Vector2Abs(Vector2 v);
 
 /**
+ * Game.c
+ */
+void PlayGame();
+
+/**
  * Environtment Items IDs:
  *  This is a list of all IDs for future reference when checking collision
  *  
