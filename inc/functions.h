@@ -13,15 +13,17 @@
 //physics constants
 #define GRAVITY 9.80665f
 #define MAX_VELOCITY 200.0f
-#define FRICTION 1.0f
+#define FRICTION 0.5f
 
 //player constants
-#define MAX_JMP_HT 5
-#define DFLT_JMP_HT 2
+#define MAX_JMP_HT 6
+#define DFLT_JMP_HT 3
 #define DFLT_SPD 1.5f
 #define DFLT_SPRNT_SPD 4.0f
-#define PLYR_SZ_X 50.0f
-#define PLYR_SZ_Y 100.0f
+#define PLYR_SZ_X 32.0f
+#define PLYR_SZ_Y 64.0f
+
+// envItems constants
 #define ITEM_SZ 25.0f
 #define PLTFRM_SZ 150.f
 
@@ -33,6 +35,15 @@
 
 //for fun
 #define YES 1
+
+typedef struct Sprite {
+    Texture2D texture;
+    Vector2 frameSize; // dimensions for each frame
+    int maxFrame;   // 
+    int framesWide; // number of columns in the sprite frame
+    Vector2 origin; // starting point for drawing the sprite
+    int frame;      // 
+} Sprite;
 
 typedef struct Entity {
     Rectangle hitBox;
@@ -81,6 +92,7 @@ Vector2 Vector2Abs(Vector2 v);
  * Game.c
  */
 void PlayGame();
+void DrawBackground(Texture2D *bg_textures, Entity player, Camera2D camera);
 
 /**
  * Environtment Items IDs:
