@@ -4,18 +4,6 @@
 
 #include "../inc/functions.h"
 
-// current map for testing and placing
-/* EnvItem envItems [] = {
-    * {{0, SCREEN_HEIGHT, 3800, 150 }, BROWN, true, 0, false}, //don't change this
-    * {{250, SCREEN_HEIGHT - ITEM_SZ * 2, ITEM_SZ, ITEM_SZ}, GREEN, false, 5, false}, //speed boost
-    * {{100, SCREEN_HEIGHT - ITEM_SZ * 2, ITEM_SZ, ITEM_SZ}, BLUE, false, 6, false}, //jump boost
-    * {{150, SCREEN_HEIGHT - ITEM_SZ * 2, ITEM_SZ, ITEM_SZ}, RED, false, 7, false},  //heart
-    * {{200, SCREEN_HEIGHT - ITEM_SZ * 2, ITEM_SZ, ITEM_SZ}, GOLD, false, 8, false}, //coin
-    * {{3500, SCREEN_HEIGHT - 50, 100, 200}, BLACK, false, 10, false} //goal post
-* };
-*/ 
-
-
 /**
  * main
  * ----
@@ -35,7 +23,7 @@ int main() {
 
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "The Walk Home");
 
-    SetTargetFPS(60);
+    SetTargetFPS(30);
     
     // Calculate length of items array 
 
