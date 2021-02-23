@@ -17,7 +17,7 @@ EnvItem envItems[] = {
     {{1135, SCREEN_HEIGHT - ITEM_SZ * 2, ITEM_SZ, ITEM_SZ}, GOLD, false, 8, false},
     {{1300, SCREEN_HEIGHT, PLTFRM_SZ, PLTFRM_SZ}, BROWN, true, 0, false},
     {{1450, SCREEN_HEIGHT, PLTFRM_SZ, PLTFRM_SZ}, BROWN, true, 0, false},
-    {{1500, SCREEN_HEIGHT - 50, 100, 200}, BLACK, false, 10, false}
+    {{1515, SCREEN_HEIGHT - PLYR_SZ_Y, PLYR_SZ_X, PLYR_SZ_Y}, WHITE, false, 10, false}
 };
 
 /**
@@ -56,6 +56,8 @@ void PlayGame() {
 
     Texture2D grass = LoadTexture("assets/map/grass.png");
 
+    Texture2D house = LoadTexture("assets/map/house.png");
+
     int envItemsLength = sizeof(envItems) / sizeof(envItems[0]);
     float deltaTime = 0;
 
@@ -78,14 +80,18 @@ void PlayGame() {
             // used to initialize 2d mode with the camera 
             BeginMode2D(camera);
                 // draw the environment items
+                DrawTextureEx(house, (Vector2){1350,SCREEN_HEIGHT-house.height*5}, 0.0f,5.0f,WHITE);
                 for (int i = 0; i < envItemsLength; i ++) {
                    //if (!envItems[i].used) DrawRectangleRec(envItems[i].hitBox, envItems[i].color);
                    if (envItems[i].id == 0) DrawTextureEx(grass, (Vector2){envItems[i].hitBox.x, envItems[i].hitBox.y}, 0.0f, 1.0f, WHITE);
                    else if (!envItems[i].used) DrawRectangleRec(envItems[i].hitBox, envItems[i].color);
                 }
+
+
                 if (DEBUG) DrawRectangleRec(player.hitBox, player.color);
                 DrawTextureEx(playerTex, (Vector2){player.hitBox.x, player.hitBox.y}, 0.0f,1.0f, WHITE);
                 UpdatePlayer(&player, envItems, envItemsLength, deltaTime);
+
                 
 
 
@@ -99,6 +105,8 @@ void PlayGame() {
 
     }
         UnloadTexture(grass);
+        UnloadTexture(playerTex);
+        UnloadTexture(house);
         UnloadTextures(bg_textures);
 
 }
