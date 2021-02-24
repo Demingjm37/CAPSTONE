@@ -233,11 +233,11 @@ void ResetGame(Entity *player, EnvItem *envItems, int envItemsLength) {
  * @return none - returns nothing
  */
 void Debug(Entity *player) {
-    DrawText(TextFormat("Player X velocity: %f", player->velocity.x), 0, 0, 20, BLACK);
-    DrawText(TextFormat("Player Y velocity: %f", player->velocity.y), 0, 20, 20, BLACK);
-    DrawText(TextFormat("Player Coordinates: X = %0.0f,  Y = %.0f", player->hitBox.x, player->hitBox.y), 0,40, 20, BLACK);
-    DrawText(TextFormat("Coins: %d", player->coins), 0, 100, 20, BLACK);
-    DrawText(TextFormat("FPS: %d", GetFPS()), 0, 140, 20, LIME);
-    DrawText(TextFormat("Players Jump Height: %.0f", player->jumpHeight), 0, 200, 20, BLACK);
-    DrawText(TextFormat("Players speed: %.0f", player->speed), 0, 240, 20, BLACK);
+    DrawText(TextFormat("Player X velocity: %f", player->velocity.x), 0, 0, 20, WHITE);
+    DrawText(TextFormat("Player Y velocity: %f", player->velocity.y), 0, 20, 20, WHITE);
+    DrawText(TextFormat("Player Coordinates: X = %0.0f,  Y = %.0f", player->hitBox.x, player->hitBox.y), 0,40, 20, WHITE);
+    DrawText(TextFormat("Coins: %d", player->coins), 0, 100, 20, WHITE);
+    DrawText(TextFormat("FPS: %d", GetFPS()), 0, 140, 20, GREEN);
+    DrawText(TextFormat("Players Jump Height: %.0f", player->jumpHeight), 0, 200, 20, WHITE);
+    DrawText(TextFormat("Players speed: %.0f", player->speed), 0, 240, 20, WHITE);
 }
