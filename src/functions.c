@@ -12,11 +12,49 @@
  * @author Joseph Deming
  * @author Hunter Craig
  * 
- * @version 0.0.1-alpha
+ * @version 0.1.1-alpha
  */
 
 //global variable
 float speedMult = 1.0f;
+
+//Level Data - temporary position
+EnvItem level1[] = {
+    {{0, SCREEN_HEIGHT, PLTFRM_SZ, PLTFRM_SZ}, BROWN, true, 0, false},
+    {{150, SCREEN_HEIGHT, PLTFRM_SZ, PLTFRM_SZ}, BROWN, true, 0, false},
+    {{200, SCREEN_HEIGHT - ITEM_SZ * 2, ITEM_SZ, ITEM_SZ}, GOLD, false, 8, false},
+    {{300, SCREEN_HEIGHT, PLTFRM_SZ, PLTFRM_SZ}, BROWN, true, 0, false},
+    {{400, SCREEN_HEIGHT - ITEM_SZ * 2, ITEM_SZ, ITEM_SZ}, GOLD, false, 8, false},
+    {{450, SCREEN_HEIGHT, PLTFRM_SZ, PLTFRM_SZ}, BROWN, true, 0, false},
+    {{600, SCREEN_HEIGHT, PLTFRM_SZ, PLTFRM_SZ}, BROWN, true, 0, false},
+    {{600, SCREEN_HEIGHT - ITEM_SZ * 2, ITEM_SZ, ITEM_SZ}, GOLD, false, 8, false},
+    {{750, SCREEN_HEIGHT, PLTFRM_SZ, PLTFRM_SZ}, BROWN, true, 0, false},
+    {{800, SCREEN_HEIGHT - 75, 75, 100}, RED, true, 1, false},
+    {{825, SCREEN_HEIGHT - 100 - ITEM_SZ * 2, ITEM_SZ, ITEM_SZ}, GOLD, false, 8, false},
+    {{1100, SCREEN_HEIGHT, PLTFRM_SZ - 50, PLTFRM_SZ}, BROWN, true, 0, false},
+    {{1135, SCREEN_HEIGHT - ITEM_SZ * 2, ITEM_SZ, ITEM_SZ}, GOLD, false, 8, false},
+    {{1300, SCREEN_HEIGHT, PLTFRM_SZ * 2, PLTFRM_SZ}, BROWN, true, 0, false},
+    {{1500, SCREEN_HEIGHT - 50, 100, 200}, BLACK, false, 10, false}
+};
+
+EnvItem level2[] = {
+    {{0, SCREEN_HEIGHT, PLTFRM_SZ, PLTFRM_SZ}, BROWN, true, 0, false},
+    {{150, SCREEN_HEIGHT, PLTFRM_SZ, PLTFRM_SZ}, BROWN, true, 0, false},
+    {{200, SCREEN_HEIGHT - ITEM_SZ * 2, ITEM_SZ, ITEM_SZ}, GOLD, false, 8, false},
+    {{300, SCREEN_HEIGHT, PLTFRM_SZ, PLTFRM_SZ}, BROWN, true, 0, false},
+    {{400, SCREEN_HEIGHT - ITEM_SZ * 2, ITEM_SZ, ITEM_SZ}, GOLD, false, 8, false},
+    {{450, SCREEN_HEIGHT, PLTFRM_SZ, PLTFRM_SZ}, BROWN, true, 0, false},
+    {{600, SCREEN_HEIGHT, PLTFRM_SZ, PLTFRM_SZ}, BROWN, true, 0, false},
+    {{600, SCREEN_HEIGHT - ITEM_SZ * 2, ITEM_SZ, ITEM_SZ}, GOLD, false, 8, false},
+    {{750, SCREEN_HEIGHT, PLTFRM_SZ, PLTFRM_SZ}, BROWN, true, 0, false},
+    {{800, SCREEN_HEIGHT - 75, 75, 100}, BLUE, true, 1, false}, //If Code works this platform should be blue
+    {{825, SCREEN_HEIGHT - 100 - ITEM_SZ * 2, ITEM_SZ, ITEM_SZ}, GOLD, false, 8, false},
+    {{1100, SCREEN_HEIGHT, PLTFRM_SZ - 50, PLTFRM_SZ}, BROWN, true, 0, false},
+    {{1135, SCREEN_HEIGHT - ITEM_SZ * 2, ITEM_SZ, ITEM_SZ}, GOLD, false, 8, false},
+    {{1300, SCREEN_HEIGHT, PLTFRM_SZ * 2, PLTFRM_SZ}, BROWN, true, 0, false},
+    {{1500, SCREEN_HEIGHT - 50, 100, 200}, BLACK, false, 10, false}
+};
+
 
 /**
  * UpdatePlayer
@@ -97,7 +135,8 @@ void UpdatePlayer(Entity *player, EnvItem *envItems, int envItemsLength, float d
                         printf("coin item obtained\n");
                         break;
                     case 10:
-                        ResetGame(player, envItems, envItemsLength);
+                        player->level++; //Upon hitting goalpost changes to next level
+                        ResetGame(player, getLevel(player->level), envItemsLength); //Will use changed level target to calculate next level
                         printf("goal hit\n");
                         break;
                     default:
@@ -220,6 +259,8 @@ void ResetGame(Entity *player, EnvItem *envItems, int envItemsLength) {
     player->coins = 0;
 
     for (int i = 0; i < envItemsLength; i++) if (envItems[i].used) envItems[i].used = false;
+    // The above code should retroactively apply the new level templates
+    // Need to find some way to dynamically allocate envItemsLength to fit the new envItems for differing values of envItems
 }
 
 /**
@@ -240,4 +281,5 @@ void Debug(Entity *player) {
     DrawText(TextFormat("FPS: %d", GetFPS()), 0, 140, 20, LIME);
     DrawText(TextFormat("Players Jump Height: %.0f", player->jumpHeight), 0, 200, 20, BLACK);
     DrawText(TextFormat("Players speed: %.0f", player->speed), 0, 240, 20, BLACK);
+    DrawText(TextFormat("Current Level: %1d", player->level), 0, 280, 20, BLACK);
 }

@@ -41,6 +41,7 @@ typedef struct Entity {
     float speed;  //for setting the players speed
     float jumpHeight; //for setting the players jump height
     int coins;
+    int level; //Used for traching current level
 } Entity;
 
 typedef struct EnvItem {
