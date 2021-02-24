@@ -15,7 +15,7 @@ Texture2D* LoadTextures() {
 }
 
 void UnloadTextures(Texture2D *textures) {
-    int length = 5;
+    int length = sizeof(textures) / sizeof(textures[0]);
 
     for (int i = 0; i < length; i++) {
         UnloadTexture(textures[i]);
