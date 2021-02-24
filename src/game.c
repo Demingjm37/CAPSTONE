@@ -51,12 +51,12 @@ void PlayGame() {
         LoadTexture("assets/background/parallax-mountain-foreground-trees.png")
     };
 
+    Texture2D map_textures [] = {
+        LoadTexture("assets/map/grass.png"),
+        LoadTexture("assets/map/house.png")
+    };
+
     Texture2D playerTex = LoadTexture("assets/player/player-newest.png");
-
-
-    Texture2D grass = LoadTexture("assets/map/grass.png");
-
-    Texture2D house = LoadTexture("assets/map/house.png");
 
     int envItemsLength = sizeof(envItems) / sizeof(envItems[0]);
     float deltaTime = 0;
@@ -75,25 +75,15 @@ void PlayGame() {
 
             // reset the window and set background to white
             ClearBackground(WHITE);
+
             DrawBackground(bg_textures, player, camera); // draw this outside of the camera to prevent issues with how the image is drawn
 
             // used to initialize 2d mode with the camera 
             BeginMode2D(camera);
-                // draw the environment items
-                DrawTextureEx(house, (Vector2){1350,SCREEN_HEIGHT-house.height*5}, 0.0f,5.0f,WHITE);
-                for (int i = 0; i < envItemsLength; i ++) {
-                   //if (!envItems[i].used) DrawRectangleRec(envItems[i].hitBox, envItems[i].color);
-                   if (envItems[i].id == 0) DrawTextureEx(grass, (Vector2){envItems[i].hitBox.x, envItems[i].hitBox.y}, 0.0f, 1.0f, WHITE);
-                   else if (!envItems[i].used) DrawRectangleRec(envItems[i].hitBox, envItems[i].color);
-                }
 
-
-                if (DEBUG) DrawRectangleRec(player.hitBox, player.color);
-                DrawTextureEx(playerTex, (Vector2){player.hitBox.x, player.hitBox.y}, 0.0f,1.0f, WHITE);
+                DrawMap(map_textures, envItems, envItemsLength);
                 UpdatePlayer(&player, envItems, envItemsLength, deltaTime);
-
-                
-
+                DrawPlayer(playerTex, player);
 
             EndMode2D();
 
@@ -102,12 +92,11 @@ void PlayGame() {
             if (DEBUG) Debug(&player);
             
         EndDrawing();
-
     }
-        UnloadTexture(grass);
+
         UnloadTexture(playerTex);
-        UnloadTexture(house);
         UnloadTextures(bg_textures);
+        UnloadTextures(map_textures);
 
 }
 
@@ -130,7 +119,7 @@ void DrawBackground(Texture2D *textures, Entity player, Camera2D camera) {
     // these are the rates that each layer will move
     float scrollingBack  = 0.05f,
           scrollingMid   = 0.1f,
-          scrollingFront = 0.5f;
+          scrollingFront = 0.3f;
     
     // Draw the sky
     DrawTextureEx(textures[0], (Vector2){0, 0}, 0.0f, 6.0f, WHITE);
@@ -153,4 +142,54 @@ void DrawBackground(Texture2D *textures, Entity player, Camera2D camera) {
     DrawTextureEx(textures[4], (Vector2){textures[4].width * 4 , -SCREEN_HEIGHT/2}, 0.0f, 6.0f, WHITE);
     DrawTextureEx(textures[4], (Vector2){textures[4].width * 8 , -SCREEN_HEIGHT/2}, 0.0f, 6.0f, WHITE);
 
+}
+
+/**
+ * DrawMap
+ * -------
+ * 
+ * Draws all of the textures to their corresponding 
+ * envItem
+ * 
+ * @param textures - array of textures that will be drawn
+ * @param envItems - array of envItems that are rendered
+ * 
+ * @return none
+ */
+void DrawMap(Texture2D *textures, EnvItem *envItems, int envItemsLength) {
+
+    /**
+     * Textures:
+     *  0 - Grass platform block
+     *  1 - House Goal Point
+     */
+
+    DrawTextureEx(textures[1], (Vector2){1350,SCREEN_HEIGHT-textures[1].height*5}, 0.0f,5.0f,WHITE);
+    for (int i = 0; i < envItemsLength; i ++) {
+        switch (envItems[i].id) {
+            case 0:
+                DrawTextureEx(textures[0], (Vector2){envItems[i].hitBox.x, envItems[i].hitBox.y}, 0.0f, 1.0f, WHITE);
+                break;
+            default:
+                if (DEBUG && !envItems[i].used) DrawRectangleRec(envItems[i].hitBox, envItems[i].color);
+                break;
+        }
+    }
+}
+
+/**
+ * DrawPlayer
+ * ----------
+ * 
+ * Draws the players texture
+ * 
+ * Later this will be reworked to
+ * handle sprites and changing sprite frames
+ * based on players velocity.
+ */
+void DrawPlayer(Texture2D texture, Entity player) {
+    if (DEBUG) DrawRectangleRec(player.hitBox, player.color);
+    DrawTextureEx(texture, (Vector2){player.hitBox.x, player.hitBox.y}, 0.0f,1.0f, WHITE);
+
+    //todo implement player sprite
 }

@@ -93,6 +93,8 @@ Vector2 Vector2Abs(Vector2 v);
  */
 void PlayGame();
 void DrawBackground(Texture2D *bg_textures, Entity player, Camera2D camera);
+void DrawMap(Texture2D *textures, EnvItem *envItems, int envItemsLength);
+void DrawPlayer(Texture2D texture, Entity player);
 
 /**
  * Environtment Items IDs:
