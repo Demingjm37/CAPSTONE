@@ -56,11 +56,12 @@ Version: alpha-0.1.3
 
 typedef struct Sprite {
     Texture2D texture;
-    Vector2 frameSize; // dimensions for each frame
     int maxFrame;   // 
-    int framesWide; // number of columns in the sprite frame
+    float frameWidth; // number of columns in the sprite frame
+    float frameHeight;
     Vector2 origin; // starting point for drawing the sprite
-    int frame;      // 
+    int frame;      //
+    float timer; 
 } Sprite;
 
 typedef struct Entity {
@@ -103,7 +104,7 @@ void Debug(Entity *player);
 void UnloadTextures(Texture2D *textures, int length);
 void DrawBackground(Texture2D *bg_textures, Entity player, Camera2D camera);
 void DrawMap(Texture2D *textures, EnvItem *envItems, int envItemsLength);
-void DrawPlayer(Entity *player);
+void DrawPlayer(Entity *player, float deltaTime);
 
 /**
  * Helper.c
