@@ -1,3 +1,19 @@
+/*********************************************************************
+ _____ _            __    __      _ _                                 
+/__   \ |__   ___  / / /\ \ \__ _| | | __   /\  /\___  _ __ ___   ___ 
+  / /\/ '_ \ / _ \ \ \/  \/ / _` | | |/ /  / /_/ / _ \| '_ ` _ \ / _ \
+ / /  | | | |  __/  \  /\  / (_| | |   <  / __  / (_) | | | | | |  __/
+ \/   |_| |_|\___|   \/  \/ \__,_|_|_|\_\ \/ /_/ \___/|_| |_| |_|\___|
+                                                                      
+----------------------------------------------------------------------
+By: Joseph Deming & Hunter Craig
+
+Version: alpha-0.1.3
+
+
+***********************************************************************/
+
+
 #ifndef FUCNTIONS_H
 #define FUNCTIONS_H
 
@@ -20,8 +36,8 @@
 #define DFLT_JMP_HT 3
 #define DFLT_SPD 1.5f
 #define DFLT_SPRNT_SPD 4.0f
-#define PLYR_SZ_X 32.0f
-#define PLYR_SZ_Y 64.0f
+#define PLYR_SZ_X 35.0f
+#define PLYR_SZ_Y 70.0f
 
 // envItems constants
 #define ITEM_SZ 25.0f
@@ -36,6 +52,8 @@
 //for fun
 #define YES 1
 
+
+
 typedef struct Sprite {
     Texture2D texture;
     Vector2 frameSize; // dimensions for each frame
@@ -49,6 +67,7 @@ typedef struct Entity {
     Rectangle hitBox;
     Vector2 velocity;
     Color color;
+    Sprite sprite;
     bool canJump; //used to prevent double jumps
     float speed;  //for setting the players speed
     float jumpHeight; //for setting the players jump height
@@ -64,11 +83,16 @@ typedef struct EnvItem {
 } EnvItem;
 
 /**
+ * Levels.c
+ */
+extern EnvItem envItems[16];
+
+/**
  * Functions.c
  */
 void UpdatePlayer(Entity *player, EnvItem *envItems, int envItemsLength, float deltaTime);
 void UpdateCameraCenter(Camera2D *camera, Entity *player, EnvItem *envItems, int width, int height);
-void CreatePlayer(Entity *player);
+void CreatePlayer(Entity *player, Texture2D texture);
 void CreateCamera(Camera2D *camera, Entity *player, int width, int height);
 void ResetGame(Entity *player, EnvItem *envItems, int envItemsLength);
 void Debug(Entity *player);
@@ -76,8 +100,10 @@ void Debug(Entity *player);
 /**
  * Textures.c
  */
-Texture2D* LoadTextures();
-void UnloadTextures(Texture2D *textures);
+void UnloadTextures(Texture2D *textures, int length);
+void DrawBackground(Texture2D *bg_textures, Entity player, Camera2D camera);
+void DrawMap(Texture2D *textures, EnvItem *envItems, int envItemsLength);
+void DrawPlayer(Entity *player);
 
 /**
  * Helper.c
@@ -91,10 +117,7 @@ Vector2 Vector2Abs(Vector2 v);
 /**
  * Game.c
  */
-void PlayGame();
-void DrawBackground(Texture2D *bg_textures, Entity player, Camera2D camera);
-void DrawMap(Texture2D *textures, EnvItem *envItems, int envItemsLength);
-void DrawPlayer(Texture2D texture, Entity player);
+int PlayGame();
 
 /**
  * Environtment Items IDs:
@@ -112,5 +135,10 @@ void DrawPlayer(Texture2D texture, Entity player);
  *  9 - reserved
  * 10 - goal post
  */
+
+
+
+
+
 
 #endif
