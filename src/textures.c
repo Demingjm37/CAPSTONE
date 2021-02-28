@@ -10,10 +10,8 @@
  * and unloading the textures used
  * 
  * @author Joseph Deming
- * @version 0.0.2
+ * @version 0.2.2
  */
-
-
 
 /**
  * UnloadTextures
@@ -116,13 +114,38 @@ void DrawMap(Texture2D *textures, EnvItem *envItems, int envItemsLength) {
  * 
  * Draws the players texture
  * 
- * Later this will be reworked to
- * handle sprites and changing sprite frames
- * based on players velocity.
+ *
+ * @param player - pointer to the player entity
+ * @param deltaTime - time that has elapsed since the last frame was drawn
+ * 
+ * @return none - doesn't return anything
  */
-void DrawPlayer(Entity *player) {
-    if (DEBUG) DrawRectangleRec(player->hitBox, player->color);
-    //DrawTextureEx(texture, (Vector2){player.hitBox.x, player.hitBox.y}, 0.0f,4.0f, WHITE);
+void DrawPlayer(Entity *player, float deltaTime) {
+    if (DEBUG) DrawRectangleRec(player->hitBox, player->color); //draw players hitBox
+    
+    player->sprite.timer += deltaTime; // update the frame time
+    float height = 0;
+    float width  = 0;
 
-    //todo implement player sprite
+    if (player->sprite.timer >= 0.2f) { // if enough time has elapsed draw the next frame
+        player->sprite.timer  = 0;      // reset the timer
+        player->sprite.frame++;         // increment the frame
+    }
+
+    player->sprite.frame %= player->sprite.maxFrame - 1; // check if current frame is out of range
+    if (player->sprite.frame == 0) player->sprite.frame++;
+
+    if (player->velocity.x <  0.0f) height = (float)player->sprite.frameHeight;
+    if (player->velocity.y != 0.0f) width  = player->sprite.frameWidth * 5;
+    else width = player->sprite.frameWidth * player->sprite.frame;
+
+    if (round(player->velocity.x) == 0 && player->velocity.y == 0) width = 0;
+
+
+    Rectangle src  = (Rectangle) {width, height, player->sprite.frameWidth, player->sprite.frameHeight}; // this is the dimension of the current frame
+    Rectangle dst  = player->hitBox; // players hitBox
+    Vector2 origin = (Vector2) {0,0}; // origin point for the sprite sheet
+    
+    DrawTexturePro(player->sprite.texture, src, dst, origin, 0.0f, WHITE); // draw the current sprite frame to the players htiBox
+
 }
