@@ -1,5 +1,5 @@
 /**
- * functions.c
+ * Functions.c
  */
 
 #include "../inc/functions.h"
@@ -12,7 +12,7 @@
  * @author Joseph Deming
  * @author Hunter Craig
  * 
- * @version 0.0.1-alpha
+ * @version 1.1.2
  */
 
 //global variable
@@ -177,14 +177,21 @@ void UpdateCameraCenter(Camera2D *camera, Entity *player, EnvItem *envItems, int
  * @return none - returns nothing
  */
 
-void CreatePlayer(Entity *player) {
-    player->hitBox = (Rectangle) {10, SCREEN_HEIGHT - 350, PLYR_SZ_X, PLYR_SZ_Y};
+void CreatePlayer(Entity *player, Texture2D texture) {
+    player->hitBox   = (Rectangle) {10, SCREEN_HEIGHT - 350, PLYR_SZ_X, PLYR_SZ_Y};
     player->velocity = (Vector2) {0,0};
     player->color = PINK;
     player->speed = DFLT_SPD;
     player->jumpHeight = DFLT_JMP_HT;
-    player->canJump = YES;
+    player->canJump    = YES;
     player->coins = 0;
+
+    player->sprite.frameSize = (Vector2){9,18};
+    player->sprite.texture   = texture;
+    player->sprite.maxFrame  = 12;
+    player->sprite.framesWide = 6;
+
+    player->sprite.origin = (Vector2){player->hitBox.x, player->hitBox.y};
 }
 
 /**
@@ -211,11 +218,11 @@ void CreateCamera(Camera2D *camera, Entity *player, int width, int height) {
 }
 
 void ResetGame(Entity *player, EnvItem *envItems, int envItemsLength) {
-    player->hitBox = (Rectangle) {10, SCREEN_HEIGHT - 350, PLYR_SZ_X, PLYR_SZ_Y};
+    player->hitBox   = (Rectangle) {10, SCREEN_HEIGHT - 350, PLYR_SZ_X, PLYR_SZ_Y};
     player->velocity = (Vector2) {0,0};
-    player->speed = DFLT_SPD;
+    player->speed    = DFLT_SPD;
     speedMult = 1;
-    player->canJump = false;
+    player->canJump    = false;
     player->jumpHeight = DFLT_JMP_HT;
     player->coins = 0;
 

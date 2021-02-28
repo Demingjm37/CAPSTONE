@@ -5,6 +5,19 @@
 #include "../inc/functions.h"
 
 /**
+ * main.c contains the main method for the game.
+ * This file initializes the screen and pushes
+ * all necessary functions on to the state manager
+ * stack and destroys as needed
+ * 
+ * @author Joseph Deming
+ * @author Hunter Craig
+ * 
+ * @version 0.1.3
+ */
+
+
+/**
  * main
  * ----
  * 
@@ -19,19 +32,15 @@
 
 int main() {
 
-
-
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "The Walk Home");
 
-    SetTargetFPS(30);
-    
-    // Calculate length of items array 
-
+    SetTargetFPS(60);
 
     // Main game loop
     // Loop runs as long as the window
     // isn't set to close.
     while(!WindowShouldClose()) {
+        //Todo: implement state manager stack
         // StartMenu()
 
         /**
@@ -47,7 +56,7 @@ int main() {
         // CreditMenu()
     }
 
-    CloseWindow(); // close window and opengl
+    CloseWindow(); // tell opengl to close the window
 
     return 0;
 }

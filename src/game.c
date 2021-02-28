@@ -1,24 +1,20 @@
-#include "functions.h"
+/**
+ * Game.c
+ */
 
-//Level 1 test code
-EnvItem envItems[] = {
-    {{0, SCREEN_HEIGHT, PLTFRM_SZ, PLTFRM_SZ}, BROWN, true, 0, false},
-    {{150, SCREEN_HEIGHT, PLTFRM_SZ, PLTFRM_SZ}, BROWN, true, 0, false},
-    {{200, SCREEN_HEIGHT - ITEM_SZ * 2, ITEM_SZ, ITEM_SZ}, GOLD, false, 8, false},
-    {{300, SCREEN_HEIGHT, PLTFRM_SZ, PLTFRM_SZ}, BROWN, true, 0, false},
-    {{400, SCREEN_HEIGHT - ITEM_SZ * 2, ITEM_SZ, ITEM_SZ}, GOLD, false, 8, false},
-    {{450, SCREEN_HEIGHT, PLTFRM_SZ, PLTFRM_SZ}, BROWN, true, 0, false},
-    {{600, SCREEN_HEIGHT, PLTFRM_SZ, PLTFRM_SZ}, BROWN, true, 0, false},
-    {{600, SCREEN_HEIGHT - ITEM_SZ * 2, ITEM_SZ, ITEM_SZ}, GOLD, false, 8, false},
-    {{750, SCREEN_HEIGHT, PLTFRM_SZ, PLTFRM_SZ}, BROWN, true, 0, false},
-    {{800, SCREEN_HEIGHT - 75, 75, 100}, RED, true, 1, false},
-    {{825, SCREEN_HEIGHT - 100 - ITEM_SZ * 2, ITEM_SZ, ITEM_SZ}, GOLD, false, 8, false},
-    {{1100, SCREEN_HEIGHT, PLTFRM_SZ, PLTFRM_SZ}, BROWN, true, 0, false},
-    {{1135, SCREEN_HEIGHT - ITEM_SZ * 2, ITEM_SZ, ITEM_SZ}, GOLD, false, 8, false},
-    {{1300, SCREEN_HEIGHT, PLTFRM_SZ, PLTFRM_SZ}, BROWN, true, 0, false},
-    {{1450, SCREEN_HEIGHT, PLTFRM_SZ, PLTFRM_SZ}, BROWN, true, 0, false},
-    {{1515, SCREEN_HEIGHT - PLYR_SZ_Y, PLYR_SZ_X, PLYR_SZ_Y}, WHITE, false, 10, false}
-};
+#include "../inc/functions.h"
+
+/**
+ * game.c holds the game functions for each level.
+ * Each function will contain the textures and function calls necessary to 
+ * load, play, and complete each level.
+ * 
+ * @author Joseph Deming
+ * @version 0.1.0
+ */
+
+
+
 
 /**
  * PlayGame
@@ -33,15 +29,10 @@ EnvItem envItems[] = {
  * @return none - nothing to return;
  */
 
-void PlayGame() {
+int PlayGame() {
     bool game_state = true; // change to false when game has complete
 
-        //Initialize everything
-    Entity player = { 0 };
-    CreatePlayer(&player);
-
-    Camera2D camera = { 0 };
-    CreateCamera(&camera, &player, SCREEN_WIDTH, SCREEN_HEIGHT);
+    //Initialize everything
 
     Texture2D bg_textures [] = {
         LoadTexture("assets/background/parallax-mountain-bg.png"),
@@ -53,17 +44,28 @@ void PlayGame() {
 
     Texture2D map_textures [] = {
         LoadTexture("assets/map/grass.png"),
-        LoadTexture("assets/map/house.png")
+        LoadTexture("assets/map/house.png"),
+        LoadTexture("assets/map/grass_top.png")
     };
 
-    Texture2D playerTex = LoadTexture("assets/player/player-newest.png");
+    Texture2D playerSprite = LoadTexture("assets/player/player-sprite");
+
+    Entity player = { 0 };
+    CreatePlayer(&player, playerSprite);
+
+    Camera2D camera = { 0 };
+    CreateCamera(&camera, &player, SCREEN_WIDTH, SCREEN_HEIGHT);
 
     int envItemsLength = sizeof(envItems) / sizeof(envItems[0]);
+    int bg_length = sizeof(bg_textures) / sizeof(bg_textures[0]);
+    int map_textures_length = sizeof(map_textures) / sizeof(map_textures[0]);
+
     float deltaTime = 0;
+    bool escaped = false;
 
     while(game_state)  {
 
-        if (IsKeyPressed(KEY_ESCAPE)) return;
+        if (IsKeyPressed(KEY_ESCAPE)) {escaped = true; game_state = false;}
         if (IsKeyPressed(KEY_R)) ResetGame(&player, envItems, envItemsLength);
         
         // update delta time, player, and camera
@@ -71,7 +73,7 @@ void PlayGame() {
         UpdateCameraCenter(&camera, &player, envItems, SCREEN_WIDTH, SCREEN_HEIGHT);
 
         // begin drawing the window
-        BeginDrawing();
+        BeginDrawing(); {
 
             // reset the window and set background to white
             ClearBackground(WHITE);
@@ -79,117 +81,27 @@ void PlayGame() {
             DrawBackground(bg_textures, player, camera); // draw this outside of the camera to prevent issues with how the image is drawn
 
             // used to initialize 2d mode with the camera 
-            BeginMode2D(camera);
+            BeginMode2D(camera); {
 
                 DrawMap(map_textures, envItems, envItemsLength);
                 UpdatePlayer(&player, envItems, envItemsLength, deltaTime);
-                DrawPlayer(playerTex, player);
+                DrawPlayer(&player);
 
-            EndMode2D();
+            } EndMode2D();
 
             //This is simply for debugging
             //Todo: replace with helper function for debug uses
             if (DEBUG) Debug(&player);
             
-        EndDrawing();
+        } EndDrawing();
     }
 
-        UnloadTexture(playerTex);
-        UnloadTextures(bg_textures);
-        UnloadTextures(map_textures);
+        UnloadTexture(playerSprite);
+        UnloadTextures(bg_textures, bg_length);
+        UnloadTextures(map_textures, map_textures_length);
 
-}
-
-/**
- * DrawBackground
- * --------------
- * 
- * Draws the images and handles the
- * animation of the background to generate
- * a 2d parallax.
- * 
- * @param bg_textures - array of 2d textures used in the background
- * @param player - used to provide new positions for the background scrolling
- * @param camera - used to provide a stationary position for background images that shouldn't move
- * 
- * @return none - returns nothing
- */
-void DrawBackground(Texture2D *textures, Entity player, Camera2D camera) {
- 
-    // these are the rates that each layer will move
-    float scrollingBack  = 0.05f,
-          scrollingMid   = 0.1f,
-          scrollingFront = 0.3f;
-    
-    // Draw the sky
-    DrawTextureEx(textures[0], (Vector2){0, 0}, 0.0f, 6.0f, WHITE);
-
-    // Draw the farthest mountain
-    DrawTextureEx(textures[1], (Vector2){scrollingBack * -player.hitBox.x, 125}, 0.0f, 4.0f, WHITE);
-    DrawTextureEx(textures[1], (Vector2){textures[1].width * 2 + scrollingBack * -player.hitBox.x + 20, 125}, 0.0f, 4.0f, WHITE);
-
-    // Draw the closets mountains
-    DrawTextureEx(textures[2], (Vector2){scrollingMid * -player.hitBox.x, 125}, 0.0f, 4.0f, WHITE);
-    DrawTextureEx(textures[2], (Vector2){textures[2].width * 2 + scrollingMid * -player.hitBox.x, 125}, 0.0f, 4.0f, WHITE);
-
-
-    // Draw the farthest trees
-    DrawTextureEx(textures[3], (Vector2){scrollingFront * -player.hitBox.x, -50}, 0.0f, 5.0f, WHITE);
-    DrawTextureEx(textures[3], (Vector2){textures[3].width * 2 + scrollingFront * -player.hitBox.x, -50}, 0.0f, 5.0f, WHITE);
-
-    // Draw the foreground trees, these move with the map itself so they don't change at a separate rate
-    DrawTextureEx(textures[4], (Vector2){0, -SCREEN_HEIGHT/4}, 0.0f, 6.0f, WHITE);
-    DrawTextureEx(textures[4], (Vector2){textures[4].width * 4 , -SCREEN_HEIGHT/2}, 0.0f, 6.0f, WHITE);
-    DrawTextureEx(textures[4], (Vector2){textures[4].width * 8 , -SCREEN_HEIGHT/2}, 0.0f, 6.0f, WHITE);
-
-}
-
-/**
- * DrawMap
- * -------
- * 
- * Draws all of the textures to their corresponding 
- * envItem
- * 
- * @param textures - array of textures that will be drawn
- * @param envItems - array of envItems that are rendered
- * 
- * @return none
- */
-void DrawMap(Texture2D *textures, EnvItem *envItems, int envItemsLength) {
-
-    /**
-     * Textures:
-     *  0 - Grass platform block
-     *  1 - House Goal Point
-     */
-
-    DrawTextureEx(textures[1], (Vector2){1350,SCREEN_HEIGHT-textures[1].height*5}, 0.0f,5.0f,WHITE);
-    for (int i = 0; i < envItemsLength; i ++) {
-        switch (envItems[i].id) {
-            case 0:
-                DrawTextureEx(textures[0], (Vector2){envItems[i].hitBox.x, envItems[i].hitBox.y}, 0.0f, 1.0f, WHITE);
-                break;
-            default:
-                if (DEBUG && !envItems[i].used) DrawRectangleRec(envItems[i].hitBox, envItems[i].color);
-                break;
-        }
-    }
-}
-
-/**
- * DrawPlayer
- * ----------
- * 
- * Draws the players texture
- * 
- * Later this will be reworked to
- * handle sprites and changing sprite frames
- * based on players velocity.
- */
-void DrawPlayer(Texture2D texture, Entity player) {
-    if (DEBUG) DrawRectangleRec(player.hitBox, player.color);
-    DrawTextureEx(texture, (Vector2){player.hitBox.x, player.hitBox.y}, 0.0f,1.0f, WHITE);
-
-    //todo implement player sprite
+        if (escaped) 
+            return 1;
+        
+        return 0;
 }

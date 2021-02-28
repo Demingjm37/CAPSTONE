@@ -1,4 +1,19 @@
+/**
+ * Helper.c
+ */
+
 #include "../inc/functions.h"
+
+/**
+ * helper.c contains the helper routines for checking
+ * and resolving collision detection, as well as other
+ * various routines for performing repetitive calculations
+ * 
+ * @author Joseph Deming
+ * @version 0.0.2
+ */
+
+
 
 /**
  * CalculateCollisionDistance
