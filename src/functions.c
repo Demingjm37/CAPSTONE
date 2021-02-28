@@ -186,12 +186,15 @@ void CreatePlayer(Entity *player, Texture2D texture) {
     player->canJump    = YES;
     player->coins = 0;
 
-    player->sprite.frameSize = (Vector2){9,18};
     player->sprite.texture   = texture;
-    player->sprite.maxFrame  = 12;
-    player->sprite.framesWide = 6;
+    player->sprite.maxFrame  = 6;//(int)(player->sprite.texture.width / (int)player->sprite.texture.height);
 
-    player->sprite.origin = (Vector2){player->hitBox.x, player->hitBox.y};
+    player->sprite.frameWidth  = (float)(player->sprite.texture.width)  / 6;
+    player->sprite.frameHeight = (float)(player->sprite.texture.height) / 2;
+
+    player->sprite.timer = 0;
+    player->sprite.frame = 0;
+
 }
 
 /**
