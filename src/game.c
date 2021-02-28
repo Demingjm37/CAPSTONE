@@ -48,7 +48,7 @@ int PlayGame() {
         LoadTexture("assets/map/grass_top.png")
     };
 
-    Texture2D playerSprite = LoadTexture("assets/player/player-sprite");
+    Texture2D playerSprite = LoadTexture("assets/player/player-sprite.png");
 
     Entity player = { 0 };
     CreatePlayer(&player, playerSprite);
@@ -85,7 +85,7 @@ int PlayGame() {
 
                 DrawMap(map_textures, envItems, envItemsLength);
                 UpdatePlayer(&player, envItems, envItemsLength, deltaTime);
-                DrawPlayer(&player);
+                DrawPlayer(&player, deltaTime);
 
             } EndMode2D();
 
