@@ -83,23 +83,6 @@ typedef struct EnvItem {
     bool used;
 } EnvItem;
 
-//Typedefs for State and Statehandler
-typedef unsigned int (*Command)();
-typedef unsigned int (*CommandFl)(float);
-
-typedef struct {
-    Command init;
-    CommandFl update;
-    CommandFl draw;
-    Command destroy;
-} State;
-
-typedef struct {
-    State **stack;
-    int capacity;
-    int top;
-} StateManager;
-
 /**
  * Levels.c
  */
@@ -115,13 +98,6 @@ void CreatePlayer(Entity *player, Texture2D texture);
 void CreateCamera(Camera2D *camera, Entity *player, int width, int height);
 void ResetGame(Entity *player, EnvItem *envItems, int envItemsLength);
 void Debug(Entity *player);
-// int InitState (StateManager *statemanager);
-// int FreeState (StateManager *statemanager);
-// int PushState (StateManager *statemanager);
-// int PopState (StateManager *statemanager);
-// State *GetTopState (StateManager *statemanager);
-// int UpdateState (StateManager *statemanager);
-// int DrawState (StateManager *statemanager);
 
 /**
  * Textures.c
