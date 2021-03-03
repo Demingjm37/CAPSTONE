@@ -47,7 +47,7 @@ Version: alpha-0.1.3
 #define MAX_CMA_X 1600
 #define MAX_CMA_Y 5000
 
-#define DEBUG false //set to true for debug info
+#define DEBUG true //set to true for debug info
 
 //for fun
 #define YES 1
@@ -87,11 +87,12 @@ typedef struct EnvItem {
  * Levels.c
  */
 extern EnvItem envItems[16];
+extern EnvItem level2[16];
 
 /**
  * Functions.c
  */
-void UpdatePlayer(Entity *player, EnvItem *envItems, int envItemsLength, float deltaTime);
+void UpdatePlayer(Entity *player, EnvItem *envItems, int envItemsLength, float deltaTime, bool *game_state);
 void UpdateCameraCenter(Camera2D *camera, Entity *player, EnvItem *envItems, int width, int height);
 void CreatePlayer(Entity *player, Texture2D texture);
 void CreateCamera(Camera2D *camera, Entity *player, int width, int height);
@@ -119,6 +120,7 @@ Vector2 Vector2Abs(Vector2 v);
  * Game.c
  */
 int PlayGame();
+int PlayGame2();
 
 /**
  * Environtment Items IDs:
