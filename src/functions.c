@@ -34,7 +34,7 @@ float speedMult = 1.0f;
  * @return none - returns nothing
  */
 
-void UpdatePlayer(Entity *player, EnvItem *envItems, int envItemsLength, float deltaTime) {
+void UpdatePlayer(Entity *player, EnvItem *map, int mapLength, float deltaTime, bool *game_state) {
     float horizontal = IsKeyDown(KEY_D) - IsKeyDown(KEY_A); // used to determine the direction the player is moving, if both keys are pressed then horizontal = 0 and the player won't move
     int initJumpVelocity = sqrtf(2 * GRAVITY * player->jumpHeight); // the initial y-velocity used when a player jumps
 
@@ -60,9 +60,9 @@ void UpdatePlayer(Entity *player, EnvItem *envItems, int envItemsLength, float d
     if (isnan(player->velocity.x)) player->velocity.x = 0;
     if (isnan(player->velocity.y)) player->velocity.y = 0;
 
-    for (int i = 0; i < envItemsLength; i++) {
-        if (envItems[i].blocking && PredictCollision(*player, envItems[i])) { // if this object isn't passable and collision 'will' occur then resolve it
-            ResolveCollision(player, envItems[i], deltaTime);
+    for (int i = 0; i < mapLength; i++) {
+        if (map[i].blocking && PredictCollision(*player, map[i])) { // if this object isn't passable and collision 'will' occur then resolve it
+            ResolveCollision(player, map[i], deltaTime);
         }
     }
 
@@ -72,39 +72,40 @@ void UpdatePlayer(Entity *player, EnvItem *envItems, int envItemsLength, float d
     player->hitBox.y += player->velocity.y;
 
 
-    for (int i = 0; i < envItemsLength; i++) {
-        if (!envItems[i].blocking && !envItems[i].used &&  //if the current item isn't blocking, hasn't been consumed, and is in collision then proceed
-            CheckCollisionRecs(player->hitBox, envItems[i].hitBox)) {
-                switch (envItems[i].id) {
+    for (int i = 0; i < mapLength; i++) {
+        if (!map[i].blocking && !map[i].used &&  //if the current item isn't blocking, hasn't been consumed, and is in collision then proceed
+            CheckCollisionRecs(player->hitBox, map[i].hitBox)) {
+                switch (map[i].id) {
                     case 3:
-                        printf("Fire hit\n");
+                        // fire obstacle
                         break;
                     case 5:
                         player->jumpHeight = DFLT_JMP_HT;
                         speedMult = 2; //double the players speed
-                        printf("Speed boost obtained\n");
+
                         break;
                     case 6:
                         speedMult = 1;
                         player->jumpHeight = MAX_JMP_HT;
-                        printf("Jump boost obtained\n");
+
                         break;
                     case 7:
-                        printf("heart item obtained\n");
+
                         break;
                     case 8:
                         player->coins++;
-                        printf("coin item obtained\n");
+                        // coins collected
                         break;
                     case 10:
-                        ResetGame(player, envItems, envItemsLength);
-                        printf("goal hit\n");
+                        ResetGame(player, map, mapLength);
+                        *game_state = false;
+                        
                         break;
                     default:
                         printf("How did we end up here?\n");
                         break; //shouldn't get here
                 }
-                envItems[i].used = (envItems[i].id == 10) ? false : true; // item has been consumed
+                map[i].used = (map[i].id == 10) ? false : true; // item has been consumed
             }
     }
 
@@ -120,7 +121,7 @@ void UpdatePlayer(Entity *player, EnvItem *envItems, int envItemsLength, float d
     if (player->hitBox.y < 150) { player->hitBox.y = 150; player->velocity.y = 0; }
 
     //Check if player has fallen through pit/world, reset game
-    if (player->hitBox.y > 1300) { ResetGame(player, envItems, envItemsLength); };
+    if (player->hitBox.y > 1300) { ResetGame(player, map, mapLength); };
 
 
 }

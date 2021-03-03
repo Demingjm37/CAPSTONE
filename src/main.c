@@ -52,6 +52,7 @@ int main() {
          * be called to draw the credit screen
          */
         PlayGame();
+        PlayGame2();
 
         // CreditMenu()
     }
