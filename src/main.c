@@ -51,8 +51,8 @@ int main() {
          * and the following function CreditMenu() will
          * be called to draw the credit screen
          */
-        PlayGame();
-        PlayGame2();
+        if (PlayGame())  break;
+        if (PlayGame2()) break;
 
         // CreditMenu()
     }

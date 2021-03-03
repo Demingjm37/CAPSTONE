@@ -86,26 +86,43 @@ void DrawBackground(Texture2D *textures, Entity player, Camera2D camera) {
  * 
  * @return none
  */
-void DrawMap(Texture2D *textures, EnvItem *envItems, int envItemsLength) {
+void DrawMap(Texture2D *textures, EnvItem *map, int mapLength) {
 
     /**
      * Textures:
      *  0 - Grass platform block
      *  1 - House Goal Point
+     *  2 - standing grass
+     *  3 - coin
+     *  4 - jump boost
+     *  5 - speed boost
+     *  6 - heart
      */
 
     DrawTextureEx(textures[1], (Vector2){1350,SCREEN_HEIGHT-textures[1].height*5}, 0.0f,5.0f,WHITE);
-    for (int i = 0; i < envItemsLength; i ++) {
-        switch (envItems[i].id) {
+    for (int i = 0; i < mapLength; i ++) {
+        switch (map[i].id) {
             case 0:
-                DrawTextureEx(textures[0], (Vector2){envItems[i].hitBox.x, envItems[i].hitBox.y}, 0.0f, 1.0f, WHITE);
+                DrawTextureEx(textures[0], (Vector2){map[i].hitBox.x, map[i].hitBox.y}, 0.0f, 1.0f, WHITE);
+                break;
+            case 5:
+                if (!map[i].used) DrawTextureEx(textures[5], (Vector2){map[i].hitBox.x, map[i].hitBox.y}, 0.0f, 2.0f, WHITE);
+                break;
+            case 6:
+                if (!map[i].used) DrawTextureEx(textures[4], (Vector2){map[i].hitBox.x, map[i].hitBox.y}, 0.0f, 2.0f, WHITE);
+                break;
+            case 7:
+                if (!map[i].used) DrawTextureEx(textures[6], (Vector2){map[i].hitBox.x, map[i].hitBox.y}, 0.0f, 2.0f, WHITE);
+                break;
+            case 8:
+                if (!map[i].used) DrawTextureEx(textures[3], (Vector2){map[i].hitBox.x, map[i].hitBox.y}, 0.0f, 1.5f, WHITE);
                 break;
             default:
-                if (DEBUG && !envItems[i].used) DrawRectangleRec(envItems[i].hitBox, envItems[i].color);
+                if ((map[i].id != 10) && !map[i].used) DrawRectangleRec(map[i].hitBox, map[i].color);
                 break;
         }
     }
-    DrawTextureEx(textures[2], (Vector2){envItems[1].hitBox.x+envItems[0].hitBox.width, envItems[0].hitBox.y-textures[2].height*3}, 0.0f, 3.0f, WHITE);
+    DrawTextureEx(textures[2], (Vector2){map[1].hitBox.x+map[0].hitBox.width, map[0].hitBox.y-textures[2].height*3}, 0.0f, 3.0f, WHITE); // standing grass
 }
 
 /**

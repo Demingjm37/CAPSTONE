@@ -45,7 +45,11 @@ int PlayGame() {
     Texture2D map_textures [] = {
         LoadTexture("assets/map/grass.png"),
         LoadTexture("assets/map/house.png"),
-        LoadTexture("assets/map/grass_top.png")
+        LoadTexture("assets/map/grass_top.png"),
+        LoadTexture("assets/map/coin.png"),
+        LoadTexture("assets/map/jump-boost.png"),
+        LoadTexture("assets/map/speed-boost.png"),
+        LoadTexture("assets/hud/heart.png")
     };
 
     Texture2D playerSprite = LoadTexture("assets/player/player-sprite.png");
@@ -56,16 +60,16 @@ int PlayGame() {
     Camera2D camera = { 0 };
     CreateCamera(&camera, &player, SCREEN_WIDTH, SCREEN_HEIGHT);
 
-    int envItemsLength = sizeof(envItems) / sizeof(envItems[0]);
-    int bg_length = sizeof(bg_textures) / sizeof(bg_textures[0]);
-    int map_textures_length = sizeof(map_textures) / sizeof(map_textures[0]);
+    int envItemsLength      = LENGTH(envItems);
+    int bg_length           = LENGTH(bg_textures);
+    int map_textures_length = LENGTH(map_textures);
 
     float deltaTime = 0;
-    bool escaped = false;
+    bool escaped    = false;
 
     while(game_state)  {
 
-        if (IsKeyPressed(KEY_ESCAPE)) {escaped = true; game_state = false;}
+        if (IsKeyPressed(KEY_X)) { escaped = true; break; }
         if (IsKeyPressed(KEY_R)) ResetGame(&player, envItems, envItemsLength);
         
         // update delta time, player, and camera
@@ -122,7 +126,12 @@ int PlayGame2() {
     Texture2D map_textures [] = {
         LoadTexture("assets/map/grass.png"),
         LoadTexture("assets/map/house.png"),
-        LoadTexture("assets/map/grass_top.png")
+        LoadTexture("assets/map/grass_top.png"),
+        LoadTexture("assets/map/coin.png"),
+        LoadTexture("assets/map/jump-boost.png"),
+        LoadTexture("assets/map/speed-boost.png"),
+        LoadTexture("assets/hud/heart.png")
+        
     };
 
     Texture2D playerSprite = LoadTexture("assets/player/player-sprite.png");
@@ -142,7 +151,7 @@ int PlayGame2() {
 
     while(game_state)  {
 
-        if (IsKeyPressed(KEY_ESCAPE)) {escaped = true; game_state = false;}
+        if (IsKeyPressed(KEY_X)) { escaped = true; break; }
         if (IsKeyPressed(KEY_R)) ResetGame(&player, level2, envItemsLength);
         
         // update delta time, player, and camera

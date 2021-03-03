@@ -184,7 +184,7 @@ void CreatePlayer(Entity *player, Texture2D texture) {
     player->color = PINK;
     player->speed = DFLT_SPD;
     player->jumpHeight = DFLT_JMP_HT;
-    player->canJump    = YES;
+    player->canJump    = false;
     player->coins = 0;
 
     player->sprite.texture   = texture;
