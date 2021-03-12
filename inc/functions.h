@@ -122,7 +122,8 @@ void DrawBackground(Texture2D *bg_textures, Entity player, Camera2D camera);
 void DrawMap(Texture2D *textures, EnvItem *envItems, int envItemsLength);
 void DrawPlayer(Entity *player, float deltaTime);
 void DrawStartScreen(Texture2D *textures, int textureLength, ScrollState *state);
-void DrawStartButton(Texture2D texture, Rectangle hitBox, bool state); // todo generalize and make into DrawButton
+void DrawButton(Texture2D texture, Rectangle hitBox, bool state); // todo generalize and make into DrawButton
+void DrawTitle(Texture2D title, Rectangle hitBox);
 
 /**
  * Helper.c
