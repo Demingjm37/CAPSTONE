@@ -238,20 +238,23 @@ void DrawStartScreen(Texture2D *textures, int textureLength, ScrollState *state)
  * Draws the specific frame of the start button
  * based on the current button state
  * x
- * @param texture - the button sprite sheet
- * @param state   - the current button state
+ * @param button - button struct
  * 
  * @return none
  */
- void DrawButton(Texture2D texture, Rectangle hitBox, bool state) {
+ void DrawButton(Button *button) {
 
-    Rectangle src  = {0,0,texture.width, texture.height/2};
-    Rectangle dst  = hitBox;
+    Rectangle src  = {0,0,button->texture.width, button->texture.height/2};
+    Rectangle dst  = button->hitBox;
     Vector2 origin = (Vector2){0,0};
 
-    if (state) src.y = texture.height/2;
+    if (button->state) {
+        src.y = button->texture.height/2;
+        button->state = false;
+    }
 
-    DrawTexturePro(texture, src, dst, origin, 0.0f, WHITE);
+    DrawTexturePro(button->texture, src, dst, origin, 0.0f, WHITE);
+    
  }
 
 /**
