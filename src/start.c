@@ -26,8 +26,8 @@
  */
 bool StartGame() {
 
-    Texture2D buttonTexture = LoadTexture("assets/menu/start_sheet.png");
-    Texture2D title = LoadTexture("assets/menu/The-Walk-Home.png");
+    
+    Texture2D title = LoadTexture("assets/menu/The-Walk-Home-test.png");
 
     Texture2D textures [] = {
         LoadTexture("assets/background/parallax-mountain-bg.png"),
@@ -40,9 +40,20 @@ bool StartGame() {
 
     ScrollState sc_state = {0};
     Vector2 mousePoint = (Vector2){0,0};
-    Rectangle buttonhitBox = (Rectangle){SCREEN_WIDTH/2 - buttonTexture.width*2,SCREEN_HEIGHT/2 + buttonTexture.height*2,200,100};
     Rectangle titlehitBox = (Rectangle){SCREEN_WIDTH/4,SCREEN_HEIGHT/2 - title.height,title.width, title.height};
-    bool button_state = false;
+
+    Button start_button = {
+        LoadTexture("assets/menu/start_sheet.png"),
+        (Rectangle){SCREEN_WIDTH/2 - start_button.texture.width*2,SCREEN_HEIGHT/2 + start_button.texture.height*2,200,100},
+        false
+    };
+
+    Button quit_button = {
+        LoadTexture("assets/menu/quit_sheet.png"),
+        (Rectangle){SCREEN_WIDTH/2 - quit_button.texture.width*2, SCREEN_HEIGHT/2 + start_button.texture.height*5, 200,100},
+        false
+    };
+
     bool start_state = false;
     bool escaped = false;
     
@@ -51,25 +62,23 @@ bool StartGame() {
     while (!start_state) { // while the game isn't supposed to start
         if (IsKeyPressed(KEY_X)) { escaped = true; break; }
         mousePoint = GetMousePosition();
-        if (CheckCollisionPointRec(mousePoint, buttonhitBox)) {
-            if (IsMouseButtonDown(MOUSE_LEFT_BUTTON)) 
-                button_state = true;
-            if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON))
-                start_state = true;
-        }
+
+        start_state = ButtonHandler(&start_button, mousePoint);
+        if (ButtonHandler(&quit_button, mousePoint)) {start_state = true; escaped = true;}
 
         BeginDrawing();
         {
             ClearBackground(WHITE);
             DrawStartScreen(textures, texturesLength, &sc_state);
-            DrawButton(buttonTexture, buttonhitBox, button_state);
+            DrawButton(&start_button);
+            DrawButton(&quit_button);
             DrawTitle(title, titlehitBox);
             
         } EndDrawing();
     }
 
     UnloadTextures(textures, texturesLength);
-    UnloadTexture(buttonTexture);
+    UnloadTexture(start_button.texture);
     UnloadTexture(title);
     return escaped;
 }
