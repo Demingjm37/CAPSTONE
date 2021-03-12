@@ -41,7 +41,6 @@ int main() {
     // isn't set to close.
     while(!WindowShouldClose()) {
         //Todo: implement state manager stack
-        // StartMenu()
 
         /**
          * This function contains the loop for the game
@@ -51,6 +50,7 @@ int main() {
          * and the following function CreditMenu() will
          * be called to draw the credit screen
          */
+        if (StartGame()) break;
         if (PlayGame())  break;
         if (PlayGame2()) break;
 
