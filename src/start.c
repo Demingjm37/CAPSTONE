@@ -1,7 +1,9 @@
 /**
  * start.c
  */
+
 #include "../inc/functions.h"
+
 /**
  * Start.c runs the start menu loop
  * this loop will draw textures and handle
@@ -25,6 +27,7 @@
 bool StartGame() {
 
     Texture2D buttonTexture = LoadTexture("assets/menu/start_sheet.png");
+    Texture2D title = LoadTexture("assets/menu/The-Walk-Home.png");
 
     Texture2D textures [] = {
         LoadTexture("assets/background/parallax-mountain-bg.png"),
@@ -38,6 +41,7 @@ bool StartGame() {
     ScrollState sc_state = {0};
     Vector2 mousePoint = (Vector2){0,0};
     Rectangle buttonhitBox = (Rectangle){SCREEN_WIDTH/2 - buttonTexture.width*2,SCREEN_HEIGHT/2 + buttonTexture.height*2,200,100};
+    Rectangle titlehitBox = (Rectangle){SCREEN_WIDTH/4,SCREEN_HEIGHT/2 - title.height,title.width, title.height};
     bool button_state = false;
     bool start_state = false;
     bool escaped = false;
@@ -58,12 +62,14 @@ bool StartGame() {
         {
             ClearBackground(WHITE);
             DrawStartScreen(textures, texturesLength, &sc_state);
-            DrawStartButton(buttonTexture, buttonhitBox, button_state);
+            DrawButton(buttonTexture, buttonhitBox, button_state);
+            DrawTitle(title, titlehitBox);
             
         } EndDrawing();
     }
 
     UnloadTextures(textures, texturesLength);
     UnloadTexture(buttonTexture);
+    UnloadTexture(title);
     return escaped;
 }
