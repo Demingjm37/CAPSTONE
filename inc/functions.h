@@ -88,6 +88,16 @@ typedef struct EnvItem {
     bool used;
 } EnvItem;
 
+// Special Struct for maintaining the state of 
+// the scrolling background in the StartMenu
+typedef struct ScrollState {
+    float f_m_scroll;
+    float c_m_scroll;
+    float f_t_scroll;
+    float c_t_scroll;
+    float p_scroll;
+} ScrollState;
+
 /**
  * Levels.c
  */
@@ -111,6 +121,8 @@ void UnloadTextures(Texture2D *textures, int length);
 void DrawBackground(Texture2D *bg_textures, Entity player, Camera2D camera);
 void DrawMap(Texture2D *textures, EnvItem *envItems, int envItemsLength);
 void DrawPlayer(Entity *player, float deltaTime);
+void DrawStartScreen(Texture2D *textures, int textureLength, ScrollState *state);
+void DrawStartButton(Texture2D texture, Rectangle hitBox, bool state); // todo generalize and make into DrawButton
 
 /**
  * Helper.c
@@ -126,6 +138,11 @@ Vector2 Vector2Abs(Vector2 v);
  */
 int PlayGame();
 int PlayGame2();
+
+/**
+ * Start.c
+ */
+bool StartGame();
 
 /**
  * Environtment Items IDs:
