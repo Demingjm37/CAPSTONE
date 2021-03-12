@@ -152,3 +152,26 @@ bool PredictCollision(Entity player, EnvItem target) {
     Rectangle futureHitBox = (Rectangle) {player.hitBox.x + player.velocity.x, player.hitBox.y + player.velocity.y, player.hitBox.width, player.hitBox.height};
     return CheckCollisionRecs(futureHitBox, target.hitBox);
 }
+
+/**
+ * ButtonHandler
+ * -------------
+ * 
+ * Checks if button was pressed
+ * and updates button state
+ * 
+ * @param button - pointer to button being pressed
+ * @param mousePoint - Vector2 of the mouses position
+ * 
+ * @return bool - true if button is released
+ */
+bool ButtonHandler(Button *button, Vector2 mousePoint) {
+    bool state = false;
+    if (CheckCollisionPointRec(mousePoint, button->hitBox)) {
+        if (IsMouseButtonDown(MOUSE_LEFT_BUTTON)) 
+        button->state = true;
+        if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON))
+        state = true;
+    }
+    return state;
+}
