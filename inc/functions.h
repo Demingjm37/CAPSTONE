@@ -98,6 +98,12 @@ typedef struct ScrollState {
     float p_scroll;
 } ScrollState;
 
+typedef struct Button {
+    Texture2D texture;  // Sprite Sheet for the button
+    Rectangle hitBox;   // This is the where the button is drawn and checked for collision
+    bool state;         // Changes when button is pressed
+} Button;
+
 /**
  * Levels.c
  */
@@ -122,7 +128,7 @@ void DrawBackground(Texture2D *bg_textures, Entity player, Camera2D camera);
 void DrawMap(Texture2D *textures, EnvItem *envItems, int envItemsLength);
 void DrawPlayer(Entity *player, float deltaTime);
 void DrawStartScreen(Texture2D *textures, int textureLength, ScrollState *state);
-void DrawButton(Texture2D texture, Rectangle hitBox, bool state); // todo generalize and make into DrawButton
+void DrawButton(Button *button); // todo generalize and make into DrawButton
 void DrawTitle(Texture2D title, Rectangle hitBox);
 
 /**
@@ -133,6 +139,7 @@ void ResolveCollision(Entity *player, EnvItem target, float deltaTime);
 bool PredictCollision(Entity player, EnvItem target);
 Vector2 GetRectCenter(Rectangle rec);
 Vector2 Vector2Abs(Vector2 v);
+bool ButtonHandler(Button *button, Vector2 mousePoint);
 
 /**
  * Game.c
