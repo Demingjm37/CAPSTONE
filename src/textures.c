@@ -166,3 +166,90 @@ void DrawPlayer(Entity *player, float deltaTime) {
     DrawTexturePro(player->sprite.texture, src, dst, origin, 0.0f, WHITE); // draw the current sprite frame to the players htiBox
 
 }
+
+/**
+ * DrawStartScreen
+ * ---------------
+ * 
+ * Draws the textures for the start screen
+ * and animates those textures
+ * 
+ * @param textures - list of textures to use
+ * @param texturesLength - length of the list
+ * 
+ * @return none
+ */
+void DrawStartScreen(Texture2D *textures, int textureLength, ScrollState *state) {
+    /*
+        List of Textures
+        0 - sunset background - scale 6
+        1 - farthest mountains - scale 4
+        2 - closest mountains - scale 4
+        3 - farthest trees - scale 4
+        4 - closest trees - scale 5
+        5 - grass platform block - scale 1
+    */
+
+
+    // Update each rate
+
+    state->f_m_scroll -= 0.1f;
+    state->c_m_scroll -= 0.5f;
+    state->f_t_scroll -= 1.0f;
+    state->c_t_scroll -= 1.5f;
+    state->p_scroll   -= 2.0f;
+
+    // Check if out of bounds
+
+    if (state->f_m_scroll <= -textures[1].width*2) state->f_m_scroll = 0.0f;
+    if (state->c_m_scroll <= -textures[2].width*2) state->c_m_scroll = 0.0f;
+    if (state->f_t_scroll <= -textures[3].width*2) state->f_t_scroll = 0.0f;
+    if (state->c_t_scroll <= -textures[4].width*2) state->c_t_scroll = 0.0f;
+    if (state->p_scroll <= -textures[5].width*2)   state->p_scroll = 0.0f;
+
+    // Draw the textures
+
+    // The Sunset
+    DrawTextureEx(textures[0], (Vector2){0, 0}, 0.0f, 6.0f, WHITE); // this isn't moving so no need to update it
+
+    // Draw the farthest mountain
+    DrawTextureEx(textures[1], (Vector2){state->f_m_scroll, 125}, 0.0f, 4.0f, WHITE);
+    DrawTextureEx(textures[1], (Vector2){textures[1].width * 2 + state->f_m_scroll, 125}, 0.0f, 4.0f, WHITE);
+
+    // Draw the closets mountains
+    DrawTextureEx(textures[2], (Vector2){state->c_m_scroll, 175}, 0.0f, 4.0f, WHITE);
+    DrawTextureEx(textures[2], (Vector2){textures[2].width * 2 + state->c_m_scroll, 175}, 0.0f, 4.0f, WHITE);
+
+
+    // Draw the farthest trees
+    DrawTextureEx(textures[3], (Vector2){state->f_t_scroll, 100}, 0.0f, 5.0f, WHITE);
+    DrawTextureEx(textures[3], (Vector2){textures[3].width * 2 + state->f_t_scroll, 100}, 0.0f, 5.0f, WHITE);
+
+    // Draw the closest trees
+    DrawTextureEx(textures[4], (Vector2){state->c_t_scroll, -50}, 0.0f, 6.0f, WHITE);
+    DrawTextureEx(textures[4], (Vector2){textures[4].width * 2 + state->c_t_scroll, -50}, 0.0f, 6.0f, WHITE);
+    DrawTextureEx(textures[4], (Vector2){textures[4].width * 4 + state->c_t_scroll, -50}, 0.0f, 6.0f, WHITE);
+}
+
+/**
+ * DrawStartButton
+ * ---------------
+ * 
+ * Draws the specific frame of the start button
+ * based on the current button state
+ * 
+ * @param texture - the button sprite sheet
+ * @param state   - the current button state
+ * 
+ * @return none
+ */
+ void DrawStartButton(Texture2D texture, Rectangle hitBox, bool state) {
+
+         Rectangle src  = {0,0,texture.width, texture.height/2};
+         Rectangle dst  = hitBox;
+         Vector2 origin = (Vector2){0,0};
+         
+         if (state) src.y = texture.height/2;
+
+        DrawTexturePro(texture, src, dst, origin, 0.0f, WHITE);
+ }
