@@ -139,7 +139,7 @@ void ResolveCollision(Entity *player, EnvItem target, float deltaTime);
 bool PredictCollision(Entity player, EnvItem target);
 Vector2 GetRectCenter(Rectangle rec);
 Vector2 Vector2Abs(Vector2 v);
-bool ButtonHandler(Button *button, Vector2 mousePoint);
+bool ButtonHandler(Button *button);
 
 /**
  * Game.c

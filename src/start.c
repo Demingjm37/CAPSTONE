@@ -38,8 +38,7 @@ bool StartGame() {
         LoadTexture("assets/map/grass.png")
     };
 
-    ScrollState sc_state = {0};
-    Vector2 mousePoint = (Vector2){0,0};
+    ScrollState sc_state  = {0};
     Rectangle titlehitBox = (Rectangle){SCREEN_WIDTH/4,SCREEN_HEIGHT/2 - title.height,title.width, title.height};
 
     Button start_button = {
@@ -60,11 +59,8 @@ bool StartGame() {
     int texturesLength = LENGTH(textures);
 
     while (!start_state) { // while the game isn't supposed to start
-        if (IsKeyPressed(KEY_X)) { escaped = true; break; }
-        mousePoint = GetMousePosition();
-
-        start_state = ButtonHandler(&start_button, mousePoint);
-        if (ButtonHandler(&quit_button, mousePoint)) {start_state = true; escaped = true;}
+        start_state = ButtonHandler(&start_button);
+        if (ButtonHandler(&quit_button)) {start_state = true; escaped = true;}
 
         BeginDrawing();
         {

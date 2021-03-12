@@ -42,14 +42,6 @@ int main() {
     while(!WindowShouldClose()) {
         //Todo: implement state manager stack
 
-        /**
-         * This function contains the loop for the game
-         * it handles all player updates and texture rendering 
-         * for each level.
-         * when this function returns the game is complete
-         * and the following function CreditMenu() will
-         * be called to draw the credit screen
-         */
         if (StartGame()) break;
         if (PlayGame())  break;
         if (PlayGame2()) break;

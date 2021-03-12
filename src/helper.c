@@ -165,9 +165,9 @@ bool PredictCollision(Entity player, EnvItem target) {
  * 
  * @return bool - true if button is released
  */
-bool ButtonHandler(Button *button, Vector2 mousePoint) {
+bool ButtonHandler(Button *button) {
     bool state = false;
-    if (CheckCollisionPointRec(mousePoint, button->hitBox)) {
+    if (CheckCollisionPointRec(GetMousePosition(), button->hitBox)) {
         if (IsMouseButtonDown(MOUSE_LEFT_BUTTON)) 
         button->state = true;
         if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON))
